@@ -4,35 +4,33 @@ import "../styles/LandingPage.css"; // Correct the CSS import
 
 const LandingPage = () => {
   return (
-    <div className="landingpage-container">
+    <div id="landingpage-container">
       {/* Hero Section with Background Image */}
-      <div className="hero-background"></div>
+      <div id="hero-background"></div>
 
       {/* Navbar */}
-      <nav className="navbar">
-        <div className="navbar-logo">
-          {/* Add logo if needed */}
-        </div>
-        <div className="navbar-buttons">
-          <button className="currency-button">Currency Changer ▼</button>
+      <nav id="landing-navbar">
+        <div id="navbar-logo">{/* Add logo if needed */}</div>
+        <div id="navbar-buttons">
+          <button id="currency-button">Currency Changer ▼</button>
           <Link to="/signup">
-            <button className="signup-button">Sign up</button>
+            <button id="signup-button">Sign up</button>
           </Link>
           <Link to="/login">
-            <button className="login-button">Log in</button>
+            <button id="login-button">Log in</button>
           </Link>
         </div>
       </nav>
 
       {/* Content */}
-      <div className="content">
-        <img src="/logo.png" alt="Logo" className="logo-img" />
-        <h1 className="title">Immigration Hub</h1>
-        <p className="description">
+      <div id="landing-content">
+        <img src="/logo.png" alt="Logo" id="logo-img" />
+        <h1 id="title">Immigration Hub</h1>
+        <p id="description">
           Your everyday companion for your international journey.
         </p>
-        <Link to="/signup">
-          <button className="signup-btn">Sign up for free</button>
+        <Link to="/Homepage">
+          <button id="signup-btn">Explore Our Hub</button>
         </Link>
       </div>
     </div>
