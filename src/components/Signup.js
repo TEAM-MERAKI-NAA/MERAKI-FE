@@ -27,9 +27,7 @@ export const Signup = () => {
                 </div>
             </div>
             <div className="submit-container">
-                <Link to="/">
                     <button className="submit">Sign Up</button>
-                </Link>
             </div>
 
         </div>
