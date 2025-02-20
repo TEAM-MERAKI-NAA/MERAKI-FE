@@ -54,12 +54,14 @@ x
     color: white;
     padding: 8px 20px;
     border-radius: 20px;
+    cursor: pointer;
   }
   
   .login-button {
     background-color: #e0e0e0;
     padding: 8px 20px;
     border-radius: 20px;
+    cursor: pointer;
   }
   
   /* Content Styling */
@@ -100,5 +102,6 @@ x
     border-radius: 25px;
     font-size: 16px;
     margin-bottom: 30px;
+    cursor: pointer;
   }
   
