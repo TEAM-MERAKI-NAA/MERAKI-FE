@@ -127,11 +127,11 @@
 .forgot-password a {
     display: inline-block;
     text-decoration: none;
-    background: #ffffff; /* White background */
-    color: #009d1d; /* Green text */
+    background: #ffffff;
+    color: #009d1d;
     padding: 10px 30px;
     border-radius: 5px;
-    border: 2px solid #009d1d; /* Green border */
+    border: 2px solid #009d1d;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
@@ -139,6 +139,6 @@
 }
 
 .forgot-password a:hover {
-    background: #009d1d; /* Green background on hover */
-    color: #ffffff; /* White text on hover */
+    background: #009d1d;
+    color: #ffffff;
 }

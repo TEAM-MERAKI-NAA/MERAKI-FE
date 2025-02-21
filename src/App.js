@@ -10,6 +10,8 @@ import News from "./components/News";
 import Reminder from "./components/Reminder";
 import Signup from "./components/Signup";
 import ForgotPassword from "./components/ForgotPassword";
+import Dashboard from "./components/Dashboard";
+import Profile from "./components/Profile";
 
 // Import styles
 import "./styles/LandingPage.css";
@@ -26,7 +28,9 @@ function App() {
           <Route path="/news" element={<News />} />
           <Route path="/reminder" element={<Reminder />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />    
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} /> 
         </Routes>
       </div>
     </Router>
