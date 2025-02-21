@@ -9,6 +9,7 @@ import Login from "./components/Login";
 import News from "./components/News";
 import Reminder from "./components/Reminder";
 import Signup from "./components/Signup";
+import ForgotPassword from "./components/ForgotPassword";
 
 // Import styles
 import "./styles/LandingPage.css";
@@ -24,7 +25,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/news" element={<News />} />
           <Route path="/reminder" element={<Reminder />} />
-          <Route path="/signup" element={<Signup />} />  
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />    
         </Routes>
       </div>
     </Router>

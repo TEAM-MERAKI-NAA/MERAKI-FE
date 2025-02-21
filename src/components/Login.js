@@ -23,10 +23,10 @@ export const Login = () => {
                 </div>
             </div>
             <div className="forgot-password">
-                <a href="/forgot-password">Forgot Password</a>
+                <Link to="/forgot-password">Forgot Password</Link>
             </div>
             <div className="submit-container">
-                    <button className="submit">Login</button>
+                <button className="submit">Login</button>
             </div>
         </div>
     )
