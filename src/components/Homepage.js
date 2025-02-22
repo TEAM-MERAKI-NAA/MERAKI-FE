@@ -110,7 +110,7 @@ function FeatureSection() {
             <div className="icon-container">{feature.icon}</div>
             <h3 className="feature-title">{feature.title}</h3>
             <p className="feature-description">{feature.description}</p>
-            <a href="#" className="learn-more">
+            <a href="/Community" className="learn-more">
               Learn more
             </a>
           </div>
