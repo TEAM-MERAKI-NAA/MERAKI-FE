@@ -65,16 +65,16 @@ function Navbar() {
       <div id="navbar-logo">Immigration Hub</div>
       <ul id="navbar-links">
         <li>
-          <a href="#">Home</a>
+          <a href="/Homepage">Home</a>
         </li>
         <li>
-          <a href="#">About</a>
+          <a href="/Homepage">About</a>
         </li>
         <li>
-          <a href="#">Features</a>
+          <a href="/Homepage">Features</a>
         </li>
         <li>
-          <a href="#">Contact</a>
+          <a href="/Homepage">Contact</a>
         </li>
       </ul>
     </nav>
@@ -130,7 +130,7 @@ function NewsSection() {
         "The government has introduced new policies to streamline applications.",
       image:
         "https://cdn.pixabay.com/photo/2022/04/18/02/24/architecture-7139263_1280.jpg",
-      link: "#",
+      link: "/News",
     },
     {
       id: 2,
@@ -139,7 +139,7 @@ function NewsSection() {
         "Processing times for work visas have been significantly reduced.",
       image:
         "https://www.tripsavvy.com/thmb/yD2KRuls7CiXYcIkXGKCD87jS9o=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rue-saint-louis-in-the-upper-town-area-of-historic-old-quebec-quebec-city-quebec-canada-554993579-574d08b83df78ccee110df3b.jpg",
-      link: "#",
+      link: "/News",
     },
     {
       id: 3,
@@ -148,7 +148,7 @@ function NewsSection() {
         "Canada aims to welcome more skilled professionals under Express Entry.",
       image:
         "https://www.state.gov/wp-content/uploads/2023/07/shutterstock_1171990615v2.jpg",
-      link: "#",
+      link: "/News",
     },
     {
       id: 4,
@@ -157,7 +157,7 @@ function NewsSection() {
         "New rules make it simpler for foreign workers to renew their permits.",
       image:
         "https://www.carbonbrief.org/wp-content/uploads/2019/10/canada-hero-01.jpg",
-      link: "#",
+      link: "/News",
     },
     {
       id: 5,
@@ -166,7 +166,7 @@ function NewsSection() {
         "More students are being approved for study permits in Canada.",
       image:
         "https://cdn.pixabay.com/photo/2022/04/18/02/24/architecture-7139263_1280.jpg",
-      link: "#",
+      link: "News",
     },
     {
       id: 6,
