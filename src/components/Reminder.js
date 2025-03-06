@@ -6,6 +6,8 @@ export default function ReminderApp() {
   const [reminders, setReminders] = useState([]);
   const [newReminder, setNewReminder] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
+  const [customReminder, setCustomReminder] = useState("");
+  const [frequency, setFrequency] = useState("daily");
 
   useEffect(() => {
     const checkReminders = () => {
@@ -31,12 +33,14 @@ export default function ReminderApp() {
   }, [reminders]);
 
   const addReminder = () => {
-    if (newReminder.trim() !== "" && expiryDate !== "") {
+    const reminderText = newReminder || customReminder;
+    if (reminderText.trim() !== "" && expiryDate !== "") {
       setReminders([
         ...reminders,
-        { text: newReminder, expiry: expiryDate, completed: false },
+        { text: reminderText, expiry: expiryDate, frequency, completed: false },
       ]);
       setNewReminder("");
+      setCustomReminder("");
       setExpiryDate("");
     }
   };
@@ -59,7 +63,7 @@ export default function ReminderApp() {
         <ul>
           {reminders.map((reminder, index) => (
             <li key={index} className="sidebar-item">
-              {reminder.text} - {reminder.expiry}
+              {reminder.text} - {reminder.expiry} ({reminder.frequency})
             </li>
           ))}
         </ul>
@@ -79,10 +83,25 @@ export default function ReminderApp() {
             <option value="Driver License">Driver License</option>
           </select>
           <input
+            type="text"
+            placeholder="Or enter a custom reminder"
+            value={customReminder}
+            onChange={(e) => setCustomReminder(e.target.value)}
+          />
+          <input
             type="date"
             value={expiryDate}
             onChange={(e) => setExpiryDate(e.target.value)}
           />
+          <select
+            value={frequency}
+            onChange={(e) => setFrequency(e.target.value)}
+          >
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="biweekly">Biweekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
           <button onClick={addReminder}>
             <FaPlus />
           </button>
@@ -96,7 +115,7 @@ export default function ReminderApp() {
               }`}
             >
               <span>
-                {reminder.text} - {reminder.expiry}
+                {reminder.text} - {reminder.expiry} ({reminder.frequency})
               </span>
               <div className="action-buttons">
                 <button onClick={() => toggleComplete(index)}>
