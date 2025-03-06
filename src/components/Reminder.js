@@ -1,14 +1,43 @@
-import { useState } from "react";
-import { FaPlus, FaTrash, FaCheck } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaPlus, FaTrash, FaCheck, FaBell } from "react-icons/fa";
+import "../styles/Reminder.css";
 
 export default function ReminderApp() {
   const [reminders, setReminders] = useState([]);
   const [newReminder, setNewReminder] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+
+  useEffect(() => {
+    const checkReminders = () => {
+      const today = new Date().toISOString().split("T")[0];
+      reminders.forEach((reminder) => {
+        if (reminder.expiry === today) {
+          new Notification("Reminder Alert", {
+            body: `Time to renew: ${reminder.text}`,
+          });
+        }
+      });
+    };
+
+    if (Notification.permission === "granted") {
+      checkReminders();
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          checkReminders();
+        }
+      });
+    }
+  }, [reminders]);
 
   const addReminder = () => {
-    if (newReminder.trim() !== "") {
-      setReminders([...reminders, { text: newReminder, completed: false }]);
+    if (newReminder.trim() !== "" && expiryDate !== "") {
+      setReminders([
+        ...reminders,
+        { text: newReminder, expiry: expiryDate, completed: false },
+      ]);
       setNewReminder("");
+      setExpiryDate("");
     }
   };
 
@@ -24,53 +53,58 @@ export default function ReminderApp() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-100 p-6">
-      <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-          Reminder App
-        </h1>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Add a reminder..."
+    <div className="container">
+      <div className="sidebar">
+        <h2>Upcoming Renewals</h2>
+        <ul>
+          {reminders.map((reminder, index) => (
+            <li key={index} className="sidebar-item">
+              {reminder.text} - {reminder.expiry}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="card">
+        <h1>Reminder App</h1>
+        <div className="input-container">
+          <select
             value={newReminder}
             onChange={(e) => setNewReminder(e.target.value)}
-            className="flex-grow p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onClick={addReminder}
-            className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
           >
+            <option value="">Select a reminder</option>
+            <option value="SIN Number">SIN Number</option>
+            <option value="Passport">Passport</option>
+            <option value="Study Permit">Study Permit</option>
+            <option value="Work Permit">Work Permit</option>
+            <option value="Driver License">Driver License</option>
+          </select>
+          <input
+            type="date"
+            value={expiryDate}
+            onChange={(e) => setExpiryDate(e.target.value)}
+          />
+          <button onClick={addReminder}>
             <FaPlus />
           </button>
         </div>
-        <ul className="mt-4 space-y-2">
+        <ul className="reminder-list">
           {reminders.map((reminder, index) => (
             <li
               key={index}
-              className={`flex justify-between items-center p-3 border rounded-lg ${
-                reminder.completed ? "bg-green-200" : "bg-gray-50"
+              className={`reminder-item ${
+                reminder.completed ? "completed" : "pending"
               }`}
             >
-              <span
-                className={`flex-grow ${
-                  reminder.completed
-                    ? "line-through text-gray-500"
-                    : "text-gray-800"
-                }`}
-              >
-                {reminder.text}
+              <span>
+                {reminder.text} - {reminder.expiry}
               </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => toggleComplete(index)}
-                  className="text-green-500 hover:text-green-700"
-                >
+              <div className="action-buttons">
+                <button onClick={() => toggleComplete(index)}>
                   <FaCheck />
                 </button>
                 <button
                   onClick={() => deleteReminder(index)}
-                  className="text-red-500 hover:text-red-700"
+                  className="delete-button"
                 >
                   <FaTrash />
                 </button>
