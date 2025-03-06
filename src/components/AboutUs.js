@@ -53,10 +53,10 @@ function AboutUsContent() {
         <h2>About Us</h2>
         <h3>Your Trusted Partner in Immigration Services</h3>
         <p>
-          Immigration Hub is a premier consultancy firm dedicated to helping
-          individuals and families navigate the complex immigration process with
-          ease. Since our establishment in 2012, we have assisted thousands of
-          clients in achieving their dreams of living and working abroad.
+          Immigration Hub is a dedicated organization to helping individuals
+          navigate the complex immigration process with ease. Since our
+          establishment in 2025, we have assisted a lot of students in achieving
+          their dreams of living and working abroad.
         </p>
       </div>
       <div className="about-image">
