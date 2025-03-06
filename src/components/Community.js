@@ -1,5 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Community.css";
+import "../styles/Homepage.css";
+
+// Sticky Navbar Component
+function Navbar() {
+  const [isSticky, setSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setSticky(true);
+      } else {
+        setSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <nav id="main-navbar" className={isSticky ? "sticky" : ""}>
+      <div id="navbar-logo">Immigration Hub</div>
+      <ul id="navbar-links">
+        <li>
+          <a href="/Homepage">Home</a>
+        </li>
+        <li>
+          <a href="/AboutUs">About</a>
+        </li>
+        <li>
+          <a href="/Homepage">Features</a>
+        </li>
+        <li>
+          <a href="/Homepage">Contact</a>
+        </li>
+      </ul>
+    </nav>
+  );
+}
 
 const Community = () => {
   const [posts, setPosts] = useState([
