@@ -13,11 +13,11 @@ body {
 
 .container {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: -20px -14px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
 }
 
 h1 {
@@ -39,16 +39,16 @@ input {
 }
 
 button {
-  background-color: #016d27;
+  background-color: #00782a;
   color: white;
   border: none;
-  padding: 10px;
+  padding: 3px;
   border-radius: 5px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #013e11;
 }
 
 .reminder-list {
@@ -73,10 +73,10 @@ button:hover {
 }
 
 .delete-button {
-  background-color: rgb(2, 111, 53);
-  padding: 5px;
+  background-color: rgb(191, 6, 3);
+  padding: 3px;
 }
 
 .delete-button:hover {
-  background-color: rgb(140, 241, 143);
+  background-color: rgb(126, 0, 0);
 }
