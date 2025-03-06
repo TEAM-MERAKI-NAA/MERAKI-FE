@@ -22,24 +22,28 @@ const features = [
     description:
       "Explore new ways to learn, track budgets, and connect with a community.",
     icon: <FaBookOpen className="icon blue" />,
+    link: "/Reminder", // Updated link for Reminder
   },
   {
     title: "Budget Tracking",
     description:
       "Explore new ways to learn, track budgets, and connect with a community.",
     icon: <FaChalkboardTeacher className="icon yellow" />,
+    link: "/Finance", // Updated link for Budget Tracking
   },
   {
     title: "New News",
     description:
       "Explore new ways to learn, track budgets, and connect with a community.",
     icon: <FaNewspaper className="icon light-blue" />,
+    link: "/News", // Updated link for New News
   },
   {
     title: "Community",
     description:
       "Explore new ways to learn, track budgets, and connect with a community.",
     icon: <FaUsers className="icon red" />,
+    link: "/Community", // Updated link for Community
   },
 ];
 
@@ -110,7 +114,7 @@ function FeatureSection() {
             <div className="icon-container">{feature.icon}</div>
             <h3 className="feature-title">{feature.title}</h3>
             <p className="feature-description">{feature.description}</p>
-            <a href="/Community" className="learn-more">
+            <a href={feature.link} className="learn-more">
               Learn more
             </a>
           </div>
