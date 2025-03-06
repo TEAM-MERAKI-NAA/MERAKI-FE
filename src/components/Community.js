@@ -2,17 +2,12 @@ import React, { useState, useEffect } from "react";
 import "../styles/Community.css";
 import "../styles/Homepage.css";
 
-// Sticky Navbar Component
 function Navbar() {
   const [isSticky, setSticky] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setSticky(true);
-      } else {
-        setSticky(false);
-      }
+      setSticky(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -24,7 +19,7 @@ function Navbar() {
       <div id="navbar-logo">Immigration Hub</div>
       <ul id="navbar-links">
         <li>
-          <a href="/LandingPage">Home</a>
+          <a href="/Homepage">Home</a>
         </li>
         <li>
           <a href="/AboutUs">About</a>
@@ -44,18 +39,18 @@ const Community = () => {
   const [posts, setPosts] = useState([
     {
       id: 1,
-      title: "Help in Updating SIn",
+      title: "Help in Updating SIN",
       content:
-        "Hello, I am jhon and i need help updating my Sin Number. But i dont know how to can anyone help.",
+        "Hello, I am John and I need help updating my SIN Number. Can anyone help?",
       author: "John Doe",
       date: "Feb 7, 2025",
       comments: [],
     },
     {
       id: 2,
-      title: "Important document to remmebr while applying study permit",
+      title: "Important Documents for Study Permit",
       content:
-        "Hey gys, this is jane. please remember to attach your identity while applying for study or work permit. ",
+        "Hey guys, this is Jane. Remember to attach your identity while applying for a study or work permit.",
       author: "Jane Smith",
       date: "Feb 6, 2025",
       comments: [],
@@ -88,6 +83,7 @@ const Community = () => {
     <div className="community-container">
       <h1>Community Posts</h1>
 
+      {/* New Post Section */}
       <div className="new-post-section">
         <input
           type="text"
@@ -113,6 +109,7 @@ const Community = () => {
         <button onClick={addPost}>Post</button>
       </div>
 
+      {/* Post List */}
       <div className="post-list">
         {posts.map((post) => (
           <div key={post.id} className="post-card">
@@ -124,7 +121,13 @@ const Community = () => {
             <small>
               By {post.author || "Anonymous"} | {post.date || "Just now"}
             </small>
-            <button onClick={() => setSelectedPost(post.id)}>Comment</button>
+            <button
+              className="comment-btn"
+              onClick={() => setSelectedPost(post.id)}
+            >
+              Comment
+            </button>
+
             {selectedPost === post.id && (
               <div className="comment-section">
                 <input
@@ -148,4 +151,79 @@ const Community = () => {
   );
 };
 
-export default Community;
+// Footer Component with Embedded Map
+function Footer() {
+  return (
+    <footer id="main-footer">
+      <div className="footer-overlay"></div>
+      <div className="footer-content">
+        <div className="footer-section">
+          <h3>Contact Us</h3>
+          <p>Email: info@immigrationhub.com</p>
+          <p>Phone: +1 (555) 123-4567</p>
+          <p>Address: 123 Immigration St, Toronto, Canada</p>
+        </div>
+        <div className="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li>
+              <a href="Homepage">Home</a>
+            </li>
+            <li>
+              <a href="AboutUs">About</a>
+            </li>
+            <li>
+              <a href="#">Services</a>
+            </li>
+            <li>
+              <a href="#">Contact</a>
+            </li>
+          </ul>
+        </div>
+        <div className="footer-section">
+          <h3>Stay Connected</h3>
+          <p>Follow us on social media for updates.</p>
+          <div className="social-icons">
+            <a href="#">
+              <i className="fab fa-facebook"></i>
+            </a>
+            <a href="#">
+              <i className="fab fa-twitter"></i>
+            </a>
+            <a href="#">
+              <i className="fab fa-linkedin"></i>
+            </a>
+            <a href="#">
+              <i className="fab fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+        <div className="footer-section map-container">
+          <h3>Find Us Here</h3>
+          <iframe
+            title="Google Map"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.883366256811!2d-79.35346270944989!3d43.796033168663065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4d30025d174a9%3A0x672b651841539a31!2sSeneca%20Newnham%20Campus!5e0!3m2!1sen!2sca!4v1740111432556!5m2!1sen!2sca"
+            width="100%"
+            height="300"
+            style={{ border: "0" }}
+            allowFullScreen
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <p>&copy; 2025 Team Meraki. All rights reserved.</p>
+      </div>
+    </footer>
+  );
+}
+
+export default function CommunityPage() {
+  return (
+    <div>
+      <Navbar />
+      <Community />
+      <Footer />
+    </div>
+  );
+}
