@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Community from "./components/Community";
 import Finance from "./components/Finance";
 import LandingPage from "./components/LandingPage";
+import Homepage from "./components/Homepage";
+import AboutUs from "./components/AboutUs";
 import Login from "./components/Login";
 import News from "./components/News";
 import Reminder from "./components/Reminder";
@@ -28,9 +30,6 @@ function App() {
           <Route path="/news" element={<News />} />
           <Route path="/reminder" element={<Reminder />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} /> 
         </Routes>
       </div>
     </Router>

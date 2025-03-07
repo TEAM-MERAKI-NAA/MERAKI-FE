@@ -1,7 +1,7 @@
 /* LandingPage.css */
-x
+
 /* General Layout */
-.landingpage-container {
+#landingpage-container {
     min-height: 100vh;
     background-color: white;
     display: flex;
@@ -9,63 +9,68 @@ x
     justify-content: center;
     align-items: center;
     position: relative;
+      font-family: 'Lusitana', Georgia, serif;
+
   }
   
   /* Hero Background */
-  .hero-background {
+  #hero-background {
     position: absolute;
     inset: 0;
     background-image: url("/public/background.jpg");
     background-size: cover;
     background-position: center;
     z-index: 0;
+      font-family: 'Lusitana', Georgia, serif;
+
   }
   
   /* Navbar Styling */
-  .navbar {
+  #landing-navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    position: relative;
+    position: absolute;
     top: 0;
+    width: 100%;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 10;
-  }
-  
-  .navbar-logo {
-    /* Add styling for logo if you have one */
-  }
-  
-  .navbar-buttons {
+      font-family: 'Lusitana', Georgia, serif;
+
+}
+ 
+  #navbar-buttons {
     display: flex;
     align-items: center;
     gap: 20px;
+      font-family: 'Lusitana', Georgia, serif;
+
   }
   
-  .currency-button {
+  #currency-button {
     font-size: 16px;
     color: #333;
+      font-family: 'Lusitana', Georgia, serif;
+
   }
   
-  .signup-button {
+  #signup-button {
     background-color: #388e3c;
     color: white;
     padding: 8px 20px;
     border-radius: 20px;
-    cursor: pointer;
   }
   
-  .login-button {
+  #login-button {
     background-color: #e0e0e0;
     padding: 8px 20px;
     border-radius: 20px;
-    cursor: pointer;
   }
   
   /* Content Styling */
-  .content {
+  #landing-content {
     position: relative;
     z-index: 10;
     text-align: center;
@@ -75,33 +80,37 @@ x
     flex-direction: column;
     justify-content: center;
     align-items: center;
+      font-family: 'Lusitana', Georgia, serif;
+
 }
   
-  .logo-img {
-    height: 60px;
+  #logo-img {
+    height: 20vh;
   }
   
-  .title {
-    font-size: 4rem;
+  #title {
+    font-size: 3 rem;
     font-weight: bold;
     color: black;
     margin-bottom: 20px;
+      font-family: 'Lusitana', Georgia, serif;
+
   }
   
-  .description {
+  #description {
     color: black;
     font-size: 18px;
     margin-bottom: 30px;
     max-width: 600px;
+      font-family: 'Lusitana', Georgia, serif;
+
   }
   
-  .signup-btn {
+  #signup-btn {
     background-color: #388e3c;
     color: white;
     padding: 14px 30px;
     border-radius: 25px;
     font-size: 16px;
     margin-bottom: 30px;
-    cursor: pointer;
   }
-  

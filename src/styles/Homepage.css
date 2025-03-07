@@ -1,0 +1,299 @@
+/* Navbar */
+#main-navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px 50px;
+  background: rgb(72 139 109 / 47%);
+  color: white;
+  z-index: 1000;
+  transition: all 0.3s ease-in-out;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+/* Sticky Navbar */
+#main-navbar.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgb(71 122 97 / 82%);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 15px 50px;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+#navbar-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  font-family: 'Lusitana', Georgia, serif;
+  
+}
+
+#navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+#navbar-links li {
+  display: inline;
+}
+
+#navbar-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+#navbar-links a:hover {
+  text-decoration: underline;
+}
+
+/* Hero Section */
+#hero-section {
+  position: relative;
+  width: 100%;
+  height: 75vh;
+  background-image: url("/public/hero-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+#hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+#hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+#hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+#hero-content p {
+  font-size: 1.2rem;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+/* Feature Section */
+#feature-section {
+  text-align: center;
+  padding: 50px 20px;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+#feature-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+#feature-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 20px;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+.feature-card {
+  flex: 1;
+  max-width: 250px;
+  text-align: center;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+.icon-container {
+  font-size: 40px;
+  margin-bottom: 10px;
+    font-family: 'Lusitana', Georgia, serif;
+
+}
+
+.learn-more {
+  display: block;
+  margin-top: 10px;
+  color: #019f19a2;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Lusitana', Georgia, serif;
+
+}
+
+.learn-more:hover {
+  text-decoration: underline;
+}
+
+/* News Section */
+#news-section {
+  padding: 50px 20px;
+  background: #f9f9f9;
+  text-align: center;
+  font-family: 'Lusitana', Georgia, serif;
+  
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+  font-family: 'Lusitana', Georgia, serif;
+
+}
+
+.news-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+.news-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-family: 'Lusitana', Georgia, serif;
+
+}
+
+.news-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+.news-card p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+  font-family: 'Lusitana', Georgia, serif;
+}
+
+.read-more {
+  display: inline-block;
+  padding: 8px 15px;
+  background-color: #036733;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Lusitana', Georgia, serif;
+
+}
+
+.read-more:hover {
+  background-color: #036e03;
+}
+
+/* Footer */
+#main-footer {
+  position: relative;
+  background: url("/public/footer.png") ;
+  color: white;
+  padding: 150px 20px;
+  text-align: center;
+}
+
+.footer-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.footer-content {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 25px;
+  z-index: 1;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 250px;
+  text-align: left;
+}
+
+.footer-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin: 5px 0;
+}
+
+.footer-section ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-section .social-icons a {
+  color: white;
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.map-container {
+  flex: 1;
+  min-width: 250px;
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+}
+
+.footer-bottom {
+  margin-top: 20px;
+  font-size: 1rem;
+  font-family: 'Lusitana', Georgia, serif;
+  color: green;
+}
