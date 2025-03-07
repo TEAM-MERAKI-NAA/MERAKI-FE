@@ -25,11 +25,17 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/homepage" element={<Homepage />} />
+          <Route path="/aboutus" element={<AboutUs />} />
+
           <Route path="/finance" element={<Finance />} />
           <Route path="/login" element={<Login />} />
           <Route path="/news" element={<News />} />
           <Route path="/reminder" element={<Reminder />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
     </Router>
