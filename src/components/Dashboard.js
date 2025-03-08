@@ -14,12 +14,12 @@ const Dashboard = () => {
         <div className="dashboard-container">
             {/* Sidebar */}
             <aside className="sidebar">
-                <h2 className="logo">MyApp</h2>
+                <h2 className="logo">IMMIGRATION HUB</h2>
                 <nav>
                     <ul>
-                        <li><Link to="#"><FaChartBar className="icon" /> Overview</Link></li>
-                        <li><Link to="#"><FaUser className="icon" /> Profile</Link></li>
-                        <li><Link to="#"><FaCog className="icon" /> Settings</Link></li>
+                        <li><Link to="/dashboard"><FaChartBar className="icon" /> Overview</Link></li>
+                        <li><Link to="/profile"><FaUser className="icon" /> Profile</Link></li>
+                        <li><Link to="/settings"><FaCog className="icon" /> Settings</Link></li>
                     </ul>
                 </nav>
             </aside>

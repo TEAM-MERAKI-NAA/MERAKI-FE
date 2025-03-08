@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Profile.css";
+import "../styles/Dashboard.css";
 import { FaUser, FaChartBar, FaTable, FaFont, FaIcons, FaMapMarkerAlt, FaBell } from "react-icons/fa";
 
 const Profile = () => {
@@ -34,13 +35,9 @@ const Profile = () => {
                 <h2 className="logo">IMMIGRATION HUB</h2>
                 <nav>
                     <ul>
-                        <li><a href="#"><FaChartBar /> Dashboard</a></li>
-                        <li className="active"><a href="#"><FaUser /> User Profile</a></li>
-                        {/* <li><a href="#"><FaTable /> Table List</a></li>
-                        <li><a href="#"><FaFont /> Typography</a></li>
-                        <li><a href="#"><FaIcons /> Icons</a></li>
-                        <li><a href="#"><FaMapMarkerAlt /> Maps</a></li>
-                        <li><a href="#"><FaBell /> Notifications</a></li> */}
+                        <li><a href="/dashboard"><FaChartBar /> Dashboard</a></li>
+                        <li className="active"><a href="/profile"><FaUser /> Profile</a></li>
+                        <li className="active"><a href="/settings"><FaUser /> Settings</a></li>
                     </ul>
                 </nav>
             </aside>
