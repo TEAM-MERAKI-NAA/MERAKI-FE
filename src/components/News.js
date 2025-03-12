@@ -77,13 +77,13 @@ const News = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [category, setCategory] = useState("all"); // Track selected category
+  const [category, setCategory] = useState("all");
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        const response = await fetch("https://api.example.com/news"); // Replace with your API endpoint
+        const response = await fetch("https://api.example.com/news");
         const data = await response.json();
         setNews(data);
         setLoading(false);
