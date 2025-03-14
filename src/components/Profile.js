@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "../styles/Profile.css";
-import "../styles/Dashboard.css";
-import { FaUser, FaChartBar, FaTable, FaFont, FaIcons, FaMapMarkerAlt, FaBell } from "react-icons/fa";
+import "../styles/Dashboard.css"; // Keeping it for consistency if needed
+import Sidebar from "./Sidebar"; // Import Sidebar component
 
 const Profile = () => {
     const [formData, setFormData] = useState({
         username: "",
         email: "",
-        firstName: "",
-        lastName: "",
+        firstName: "John",  // Example default value
+        lastName: "Doe",     // Example default value
         address: "",
         city: "",
         country: "",
@@ -17,10 +17,7 @@ const Profile = () => {
     });
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = (e) => {
@@ -31,17 +28,7 @@ const Profile = () => {
 
     return (
         <div className="profile-container">
-            <aside className="sidebar">
-                <h2 className="logo">IMMIGRATION HUB</h2>
-                <nav>
-                    <ul>
-                        <li><a href="/dashboard"><FaChartBar /> Dashboard</a></li>
-                        <li className="active"><a href="/profile"><FaUser /> Profile</a></li>
-                        <li className="active"><a href="/settings"><FaUser /> Settings</a></li>
-                    </ul>
-                </nav>
-            </aside>
-            
+            <Sidebar /> {/* Sidebar Component */}
             <main className="profile-main">
                 <h1>User Profile</h1>
                 <div className="profile-card">
@@ -64,11 +51,11 @@ const Profile = () => {
                         </div>
                         <div className="form-group">
                             <label>First Name</label>
-                            <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
+                            <input type="text" name="firstName" value={formData.firstName} readOnly />
                         </div>
                         <div className="form-group">
                             <label>Last Name</label>
-                            <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
+                            <input type="text" name="lastName" value={formData.lastName} readOnly />
                         </div>
                         <div className="form-group">
                             <label>Address</label>

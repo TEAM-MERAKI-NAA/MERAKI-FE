@@ -1,19 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Dashboard.css"; // Dashboard-specific styles
-import { FaUser, FaSignOutAlt, FaChartBar, FaCog, FaMoneyBillWave, FaTasks, FaUniversity, FaFileAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { Pie } from "react-chartjs-2"; // Importing Pie Chart
 import "chart.js/auto";
+import Sidebar from "./Sidebar"; // Import Sidebar component
 
 const Dashboard = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [tasks, setTasks] = useState(["Complete Assignment", "Pay Rent", "Attend Workshop"]);
     const [newTask, setNewTask] = useState("");
 
+    // Toggle Dropdown Menu
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
+    // Close Dropdown when Clicking Outside
+    const handleOutsideClick = (event) => {
+        if (!event.target.closest(".account-dropdown")) {
+            setDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        if (dropdownOpen) {
+            document.addEventListener("click", handleOutsideClick);
+        } else {
+            document.removeEventListener("click", handleOutsideClick);
+        }
+        return () => {
+            document.removeEventListener("click", handleOutsideClick);
+        };
+    }, [dropdownOpen]);
+
+    // Add New Task
     const addTask = () => {
         if (newTask.trim() !== "") {
             setTasks([...tasks, newTask]);
@@ -34,28 +54,18 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard-container">
-            {/* Sidebar */}
-            <aside className="sidebar">
-                <h2 className="logo">Student Hub</h2>
-                <nav>
-                    <ul>
-                        <li><Link to="#"><FaChartBar className="icon" /> Overview</Link></li>
-                        <li><Link to="/profile"><FaUser className="icon" /> Profile</Link></li>
-                        <li><Link to="#"><FaCog className="icon" /> Settings</Link></li>
-                    </ul>
-                </nav>
-            </aside>
+            <Sidebar /> {/* Sidebar Component */}
 
             {/* Main Content */}
             <main className="dashboard-content">
                 <div className="top-bar">
                     <div className="account-dropdown">
-                        <button className="account-button" onClick={toggleDropdown}>
+                        <button className="account-button green-btn" onClick={toggleDropdown}>
                             <FaUser className="icon" />
                         </button>
                         {dropdownOpen && (
                             <div className="dropdown-menu">
-                                <Link to="/" className="dropdown-item logout"><FaSignOutAlt className="icon" /> Logout</Link>
+                                <a href="/" className="dropdown-item logout"><FaSignOutAlt className="icon" /> Logout</a>
                             </div>
                         )}
                     </div>
@@ -81,11 +91,11 @@ const Dashboard = () => {
                         </ul>
                         <input
                             type="text"
-                            placeholder="Add new task..."
+                            placeholder="Add new reminder..."
                             value={newTask}
                             onChange={(e) => setNewTask(e.target.value)}
                         />
-                        <button onClick={addTask}>Add Task</button>
+                        <button className="green-btn" onClick={addTask}>Add Task</button>
                     </div>
 
                     {/* Currency Exchange */}
@@ -93,7 +103,7 @@ const Dashboard = () => {
                         <h3>Currency Exchange</h3>
                         <p>1 USD = 1.35 CAD</p>
                         <input type="number" placeholder="Enter USD" />
-                        <button>Convert</button>
+                        <button className="green-btn">Convert</button>
                     </div>
                 </div>
             </main>

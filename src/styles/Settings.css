@@ -1,0 +1,138 @@
+/* General Styling */
+.settings-container {
+    display: flex;
+    height: 100vh;
+    background: #f9f9f9; /* Light Gray Background */
+}
+
+.settings-content {
+    flex: 1;
+    padding: 40px;
+}
+
+/* Header Styling */
+.settings-header {
+    font-size: 32px;
+    font-weight: bold;
+    border-bottom: 2px solid #388e3c;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Section Styling */
+.settings-section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.settings-section:hover {
+    transform: scale(1.02);
+}
+
+/* Section Titles */
+.settings-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+}
+
+/* Buttons */
+.settings-btn {
+    background: #388e3c;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.settings-btn:hover {
+    background: #388e3c;
+    transform: scale(1.05);
+}
+
+/* Toggle Switch Styling */
+.toggle-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+/* Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+/* Checked State */
+input:checked + .slider {
+    background-color: #009d1d;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Danger Section (Delete Account) */
+.danger-section {
+    background: #ffe5e5;
+    border-left: 5px solid red;
+    background: #ffe5e5;
+    border-left: 5px solid red;
+    margin-bottom: 40px
+}
+
+.danger-btn {
+    background: #ff4d4d;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.danger-btn:hover {
+    background: #e60000;
+    transform: scale(1.05);
+}
