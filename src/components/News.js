@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "../styles/News.css";
 
 // Hero Section Component
@@ -75,20 +76,43 @@ function Navbar() {
 // News Component
 const News = () => {
   const [news, setNews] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [category, setCategory] = useState("all");
 
+  // // Fetching categories using Axios
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://4.206.179.192:8000/api/categories/news-releases/"
+  //       );
+  //       // console.log("Fetched Categories:", response.data); // Log categories to check the response
+  //       setCategories(response.data); // Set categories to state
+  //     } catch (error) {
+  //       setError("Error loading categories.");
+  //       console.error("Category fetch error:", error);
+  //     }
+  //   };
+
+  //   fetchCategories();
+  // }, []);
+
+  // Fetching news using Axios
   useEffect(() => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        const response = await fetch("https://api.example.com/news");
-        const data = await response.json();
-        setNews(data);
+        const response = await axios.get(
+          "http://4.206.179.192:8000/api/fetch-from-db/"
+        );
+        console.log("Fetched News:", response.data); // Log the fetched news data
+        setNews(response.data.data); // Set the news to state
         setLoading(false);
       } catch (error) {
         setError("Error loading news.");
+        console.error("News fetch error:", error);
         setLoading(false);
       }
     };
@@ -96,15 +120,19 @@ const News = () => {
     fetchNews();
   }, []);
 
+  // Handle category change
   const handleCategoryChange = (newCategory) => {
+    console.log("Category changed to:", newCategory); // Log the selected category
     setCategory(newCategory);
   };
 
+  // Filter news based on selected category
   const filteredNews =
     category === "all"
       ? news
       : news.filter((article) => article.category === category);
 
+  // Loading and error handling
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -117,11 +145,15 @@ const News = () => {
     <div className="news-page">
       <div className="category-filters">
         <button onClick={() => handleCategoryChange("all")}>All</button>
-        <button onClick={() => handleCategoryChange("immigration")}>
-          Immigration
-        </button>
-        <button onClick={() => handleCategoryChange("policy")}>Policy</button>
-        {/* Add more categories as needed */}
+        {categories.length > 0 &&
+          categories.map((cat, index) => (
+            <button
+              key={index}
+              onClick={() => handleCategoryChange(cat.category)}
+            >
+              {/* {cat.category} */}
+            </button>
+          ))}
       </div>
 
       <div className="news-list">
@@ -129,8 +161,8 @@ const News = () => {
           filteredNews.map((article, index) => (
             <div key={index} className="news-item">
               <h2>{article.title}</h2>
-              <p>{article.description}</p>
-              <a href={article.url} target="_blank" rel="noopener noreferrer">
+              <p>{article.summary}</p>
+              <a href={article.link} target="_blank" rel="noopener noreferrer">
                 Read more
               </a>
             </div>
@@ -143,6 +175,7 @@ const News = () => {
   );
 };
 
+// Main App Component
 const App = () => {
   return (
     <div>

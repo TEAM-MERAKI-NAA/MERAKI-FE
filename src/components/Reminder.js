@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { FaPlus, FaTrash, FaCheck, FaBell } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaBeer } from "react-icons/fa";
+
 import {
   faFacebook,
   faTwitter,
