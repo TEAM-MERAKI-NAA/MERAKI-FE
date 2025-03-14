@@ -81,23 +81,23 @@ const News = () => {
   const [error, setError] = useState(null);
   const [category, setCategory] = useState("all");
 
-  // // Fetching categories using Axios
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "http://4.206.179.192:8000/api/categories/news-releases/"
-  //       );
-  //       // console.log("Fetched Categories:", response.data); // Log categories to check the response
-  //       setCategories(response.data); // Set categories to state
-  //     } catch (error) {
-  //       setError("Error loading categories.");
-  //       console.error("Category fetch error:", error);
-  //     }
-  //   };
+  // Fetching categories using Axios
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "http://4.206.179.192:8000/api/categories/news-releases/"
+        );
+        // console.log("Fetched Categories:", response.data); // Log categories to check the response
+        setCategories(response.data); // Set categories to state
+      } catch (error) {
+        setError("Error loading categories.");
+        console.error("Category fetch error:", error);
+      }
+    };
 
-  //   fetchCategories();
-  // }, []);
+    fetchCategories();
+  }, []);
 
   // Fetching news using Axios
   useEffect(() => {
