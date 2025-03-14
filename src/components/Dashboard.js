@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Dashboard.css"; // Dashboard-specific styles
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
-import { Pie } from "react-chartjs-2"; // Importing Pie Chart
+import "../styles/Dashboard.css";
+import { FaUser, FaSignOutAlt, FaCog } from "react-icons/fa";
+import { Line } from "react-chartjs-2"; // Import Line Chart
 import "chart.js/auto";
-import Sidebar from "./Sidebar"; // Import Sidebar component
+import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [tasks, setTasks] = useState(["Complete Assignment", "Pay Rent", "Attend Workshop"]);
-    const [newTask, setNewTask] = useState("");
+    const [reminders, setReminders] = useState(["Complete Assignment", "Pay Rent", "Attend Workshop"]);
+    const [newReminder, setNewReminder] = useState("");
 
-    // Toggle Dropdown Menu
+    // Toggle Dropdown
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
-    // Close Dropdown when Clicking Outside
+    // Close dropdown when clicking outside
     const handleOutsideClick = (event) => {
         if (!event.target.closest(".account-dropdown")) {
             setDropdownOpen(false);
@@ -23,82 +23,85 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
-        if (dropdownOpen) {
-            document.addEventListener("click", handleOutsideClick);
-        } else {
-            document.removeEventListener("click", handleOutsideClick);
-        }
-        return () => {
-            document.removeEventListener("click", handleOutsideClick);
-        };
+        if (dropdownOpen) document.addEventListener("click", handleOutsideClick);
+        else document.removeEventListener("click", handleOutsideClick);
+        return () => document.removeEventListener("click", handleOutsideClick);
     }, [dropdownOpen]);
 
-    // Add New Task
-    const addTask = () => {
-        if (newTask.trim() !== "") {
-            setTasks([...tasks, newTask]);
-            setNewTask("");
+    // Function to Add Reminder
+    const addReminder = () => {
+        if (newReminder.trim() !== "") {
+            setReminders([...reminders, newReminder]);
+            setNewReminder("");
         }
     };
 
-    // Budget Tracker Data
+    // Data for Line Chart (Budget Overview)
     const budgetData = {
-        labels: ["Rent", "Food", "Transport", "Others"],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May"],
         datasets: [
             {
-                data: [40, 30, 15, 15],
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"]
+                label: "Total Expenses ($)",
+                data: [500, 700, 650, 800, 750],
+                fill: false,
+                backgroundColor: "#009d1d",
+                borderColor: "#007a14",
+                tension: 0.3
             }
         ]
     };
 
     return (
         <div className="dashboard-container">
-            <Sidebar /> {/* Sidebar Component */}
+            <Sidebar />
 
             {/* Main Content */}
             <main className="dashboard-content">
+                {/* Top Bar */}
                 <div className="top-bar">
+                    <h1 className="welcome-text">Welcome Back, User!</h1>
                     <div className="account-dropdown">
-                        <button className="account-button green-btn" onClick={toggleDropdown}>
+                        <button className="account-button" onClick={toggleDropdown}>
                             <FaUser className="icon" />
                         </button>
                         {dropdownOpen && (
                             <div className="dropdown-menu">
-                                <a href="/" className="dropdown-item logout"><FaSignOutAlt className="icon" /> Logout</a>
+                                <ul>
+                                    <li className="logout">
+                                        <a href="/"><FaSignOutAlt className="icon" /> Logout</a>
+                                    </li>
+                                </ul>
                             </div>
                         )}
                     </div>
                 </div>
 
-                <h1>Welcome Back, User!</h1>
-
-                {/* Dashboard Widgets */}
+                {/* Dashboard Widgets (Structured like settings page sections) */}
                 <div className="dashboard-widgets">
-                    {/* Budget Tracker */}
+                    {/* Budget Overview Section (Line Chart) */}
                     <div className="widget budget-tracker">
                         <h3>Budget Overview</h3>
-                        <Pie data={budgetData} />
+                        <Line data={budgetData} />
                     </div>
 
-                    {/* Task & Reminders */}
+                    {/* Reminders Section */}
                     <div className="widget task-reminder">
                         <h3>Reminders</h3>
                         <ul>
-                            {tasks.map((task, index) => (
-                                <li key={index}>{task}</li>
+                            {reminders.map((reminder, index) => (
+                                <li key={index}>{reminder}</li>
                             ))}
                         </ul>
                         <input
                             type="text"
                             placeholder="Add new reminder..."
-                            value={newTask}
-                            onChange={(e) => setNewTask(e.target.value)}
+                            value={newReminder}
+                            onChange={(e) => setNewReminder(e.target.value)}
                         />
-                        <button className="green-btn" onClick={addTask}>Add Task</button>
+                        <button className="green-btn" onClick={addReminder}>Add Reminder</button>
                     </div>
 
-                    {/* Currency Exchange */}
+                    {/* Currency Exchange Section */}
                     <div className="widget currency-exchange">
                         <h3>Currency Exchange</h3>
                         <p>1 USD = 1.35 CAD</p>
