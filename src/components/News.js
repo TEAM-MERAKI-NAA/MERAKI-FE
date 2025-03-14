@@ -80,35 +80,51 @@ const News = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [category, setCategory] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const [totalPages, setTotalPages] = useState(1); // Total number of pages
+  const [totalNews, setTotalNews] = useState(0); // Total number of news articles
 
-  // Fetching categories using Axios
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          "http://4.206.179.192:8000/api/categories/news-releases/"
-        );
-        // console.log("Fetched Categories:", response.data); // Log categories to check the response
-        setCategories(response.data); // Set categories to state
-      } catch (error) {
-        setError("Error loading categories.");
-        console.error("Category fetch error:", error);
-      }
-    };
+  const pageSize = 10; // Number of news items per page
 
-    fetchCategories();
-  }, []);
+  // // Fetching categories
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://4.206.179.192:8000/api/categories/news-releases/"
+  //       );
+  //       setCategories(response.data);
+  //     } catch (error) {
+  //       setError("Error loading categories.");
+  //       console.error("Category fetch error:", error);
+  //     }
+  //   };
 
-  // Fetching news using Axios
+  //   fetchCategories();
+  // }, []);
+
+  // Fetching news based on category and current page
   useEffect(() => {
     const fetchNews = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://4.206.179.192:8000/api/fetch-from-db/"
+          "http://4.206.179.192:8000/api/fetch-from-db/",
+          {
+            params: {
+              page: currentPage, // Current page
+              page_size: pageSize, // Number of articles per page
+              category: category === "all" ? "" : category, // Filter by category
+            },
+          }
         );
-        console.log("Fetched News:", response.data); // Log the fetched news data
-        setNews(response.data.data); // Set the news to state
+
+        // Debugging: Log the response data
+        console.log("Fetched News:", response.data);
+
+        setNews(response.data.data); // Set the paginated news articles
+        setTotalNews(response.data.total); // Set the total number of articles (for pagination)
+        setTotalPages(Math.ceil(response.data.total / pageSize)); // Calculate the total pages
         setLoading(false);
       } catch (error) {
         setError("Error loading news.");
@@ -118,19 +134,20 @@ const News = () => {
     };
 
     fetchNews();
-  }, []);
+  }, [currentPage, category]);
 
   // Handle category change
   const handleCategoryChange = (newCategory) => {
-    console.log("Category changed to:", newCategory); // Log the selected category
     setCategory(newCategory);
+    setCurrentPage(1); // Reset to the first page when category changes
   };
 
-  // Filter news based on selected category
-  const filteredNews =
-    category === "all"
-      ? news
-      : news.filter((article) => article.category === category);
+  // Change page
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   // Loading and error handling
   if (loading) {
@@ -143,22 +160,23 @@ const News = () => {
 
   return (
     <div className="news-page">
+      {/* Categories Section */}
       <div className="category-filters">
         <button onClick={() => handleCategoryChange("all")}>All</button>
-        {categories.length > 0 &&
-          categories.map((cat, index) => (
-            <button
-              key={index}
-              onClick={() => handleCategoryChange(cat.category)}
-            >
-              {/* {cat.category} */}
-            </button>
-          ))}
+        {categories.map((cat, index) => (
+          <button
+            key={index}
+            onClick={() => handleCategoryChange(cat.category)}
+          >
+            {cat.category}
+          </button>
+        ))}
       </div>
 
+      {/* News List */}
       <div className="news-list">
-        {filteredNews.length > 0 ? (
-          filteredNews.map((article, index) => (
+        {news.length > 0 ? (
+          news.map((article, index) => (
             <div key={index} className="news-item">
               <h2>{article.title}</h2>
               <p>{article.summary}</p>
@@ -171,6 +189,25 @@ const News = () => {
           <div>No news articles available.</div>
         )}
       </div>
+
+      {/* Pagination */}
+      <div className="pagination">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
@@ -179,8 +216,8 @@ const News = () => {
 const App = () => {
   return (
     <div>
-      <Hero />
       <Navbar />
+      <Hero />
       <News />
     </div>
   );
