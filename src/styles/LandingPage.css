@@ -114,3 +114,24 @@
     font-size: 16px;
     margin-bottom: 30px;
   }
+
+  /* Make all buttons change cursor to pointer on hover */
+#signup-button,
+#login-button,
+#signup-btn {
+    cursor: pointer; /* This ensures the cursor changes to a pointer */
+    transition: background-color 0.3s ease-in-out;
+}
+
+#signup-button:hover {
+    background-color: #2e7d32;
+}
+
+#login-button:hover {
+    background-color: #d6d6d6;
+}
+
+#signup-btn:hover {
+    background-color: #2e7d32;
+}
+

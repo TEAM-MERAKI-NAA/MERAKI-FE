@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "../styles/Profile.css";
-import "../styles/Dashboard.css"; // Keeping it for consistency if needed
-import Sidebar from "./Sidebar"; // Import Sidebar component
+import "../styles/Dashboard.css";
+import Sidebar from "./Sidebar"; 
 
 const Profile = () => {
     const [formData, setFormData] = useState({
         username: "",
         email: "",
-        firstName: "John",  // Example default value
-        lastName: "Doe",     // Example default value
+        firstName: "John",
+        lastName: "Doe",    
         address: "",
         city: "",
         country: "",
@@ -57,7 +57,7 @@ const Profile = () => {
                             <label>Last Name</label>
                             <input type="text" name="lastName" value={formData.lastName} readOnly />
                         </div>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label>Address</label>
                             <input type="text" name="address" value={formData.address} onChange={handleChange} />
                         </div>
@@ -72,7 +72,7 @@ const Profile = () => {
                         <div className="form-group">
                             <label>Postal Code</label>
                             <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} />
-                        </div>
+                        </div> */}
                         <div className="form-group full-width">
                             <label>About Me</label>
                             <textarea name="aboutMe" value={formData.aboutMe} onChange={handleChange}></textarea>
