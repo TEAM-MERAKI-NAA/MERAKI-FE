@@ -85,8 +85,11 @@
 
 .dashboard-content {
     flex: 1;
-    padding: 40px;
+    padding: 20px;
     padding-top: 80px;
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    overflow-x: hidden;
 }
 
 .widget {

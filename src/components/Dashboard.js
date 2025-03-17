@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Dashboard.css";
-import { FaUser, FaSignOutAlt, FaCog } from "react-icons/fa";
+import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { Line } from "react-chartjs-2"; // Import Line Chart
 import "chart.js/auto";
 import Sidebar from "./Sidebar";
