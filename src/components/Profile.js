@@ -34,7 +34,6 @@ const Profile = () => {
                 <div className="profile-card">
                     <div className="profile-header">
                         <h2>Edit Profile</h2>
-                        <p>Complete your profile</p>
                     </div>
                     <form className="profile-form" onSubmit={handleSubmit}>
                         <div className="form-group">
@@ -72,7 +71,7 @@ const Profile = () => {
                         <div className="form-group">
                             <label>Postal Code</label>
                             <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} />
-                        </div> */}
+                        </div>  */}
                         <div className="form-group full-width">
                             <label>About Me</label>
                             <textarea name="aboutMe" value={formData.aboutMe} onChange={handleChange}></textarea>
