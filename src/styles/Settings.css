@@ -5,9 +5,25 @@
     background: #f9f9f9; /* Light Gray Background */
 }
 
+/* Sidebar Styling */
+.sidebar {
+    width: 250px; /* Sidebar width */
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Keep sidebar fixed */
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Settings Content Styling */
 .settings-content {
     flex: 1;
     padding: 40px;
+    margin-left: 250px; /* Add margin-left to push content to the right */
+    overflow-y: auto;
 }
 
 /* Header Styling */
@@ -17,6 +33,7 @@
     border-bottom: 2px solid #388e3c;
     padding-bottom: 10px;
     margin-bottom: 20px;
+    margin-top: -10px;
 }
 
 /* Section Styling */
@@ -120,9 +137,7 @@ input:checked + .slider:before {
 .danger-section {
     background: #ffe5e5;
     border-left: 5px solid red;
-    background: #ffe5e5;
-    border-left: 5px solid red;
-    margin-bottom: 40px
+    margin-bottom: 40px;
 }
 
 .danger-btn {
