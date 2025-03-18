@@ -16,6 +16,7 @@ import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
 import GuidancePage from "./components/GuidancePage";
+import GuidanceDetail from "./components/GuidanceDetail";
 
 // Import styles
 import "./styles/LandingPage.css";
@@ -39,6 +40,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/guidance" element={<GuidancePage />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/guidancedetail" element={<GuidanceDetail />} />
         </Routes>
       </div>
     </Router>
