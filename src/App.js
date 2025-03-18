@@ -15,6 +15,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
+import GuidancePage from "./components/GuidancePage";
 
 // Import styles
 import "./styles/LandingPage.css";
@@ -36,6 +37,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/guidance" element={<GuidancePage />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
