@@ -1,43 +1,87 @@
-import React from "react";
-import "../styles/GuidancePage.css";
+import { useEffect, useState } from "react";
 
-const GuidancePage = () => {
+const Guidance = () => {
+  const [guidanceItems, setGuidanceItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchGuidance = async () => {
+      try {
+        const response = await fetch(
+          "http://4.206.179.192:8000/guide/api/guides"
+        ); // Replace with your actual API URL
+        const text = await response.text(); // Get raw response
+        console.log("Raw API Response:", text); // Debugging
+
+        if (!response.ok) {
+          throw new Error(
+            `API Error: ${response.status} - ${response.statusText}`
+          );
+        }
+
+        const data = JSON.parse(text); // Parse response
+        setGuidanceItems(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGuidance();
+  }, []);
+
+  if (loading) return <p>Loading guidance...</p>;
+  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
+  if (guidanceItems.length === 0) return <p>No guidance available.</p>;
+
   return (
-    <div className="guidance-container">
-      <header className="guidance-header">
-        <h1>Welcome to the Guidance Page</h1>
-        <p>Your go-to resource for navigating through the platform</p>
-      </header>
-
-      <section className="guidance-content">
-        <div className="step">
-          <h2>Step 1: Setup</h2>
-          <p>Follow the instructions to set up your environment properly.</p>
+    <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
+      <h1>Guidance</h1>
+      {guidanceItems.map((item) => (
+        <div
+          key={item.id}
+          style={{
+            borderBottom: "1px solid #ddd",
+            padding: "15px 0",
+            display: "flex",
+            alignItems: "center",
+            gap: "15px",
+          }}
+        >
+          {item.image && (
+            <img
+              src={item.image}
+              alt={item.title}
+              style={{
+                width: "100px",
+                height: "100px",
+                objectFit: "cover",
+                borderRadius: "8px",
+              }}
+            />
+          )}
+          <div>
+            <h2 style={{ margin: "0 0 5px" }}>{item.title}</h2>
+            <p style={{ margin: "0", color: "#555" }}>
+              {item.short_description}
+            </p>
+            <p style={{ fontSize: "12px", color: "#888" }}>
+              <strong>Order:</strong> {item.order} | <strong>Slug:</strong>{" "}
+              {item.slug}
+            </p>
+            <p style={{ fontSize: "12px", color: "#888" }}>
+              <strong>Created:</strong>{" "}
+              {new Date(item.created_at).toLocaleString()} |
+              <strong> Updated:</strong>{" "}
+              {new Date(item.updated_at).toLocaleString()}
+            </p>
+          </div>
         </div>
-
-        <div className="step">
-          <h2>Step 2: Configuration</h2>
-          <p>
-            Learn how to configure your application for optimal performance.
-          </p>
-        </div>
-
-        <div className="step">
-          <h2>Step 3: Best Practices</h2>
-          <p>Discover the best practices for using the platform efficiently.</p>
-        </div>
-
-        <div className="step">
-          <h2>Step 4: Troubleshooting</h2>
-          <p>Find solutions to common issues that may arise during usage.</p>
-        </div>
-      </section>
-
-      <footer className="guidance-footer">
-        <p>&copy; 2025 Your Company Name. All rights reserved.</p>
-      </footer>
+      ))}
     </div>
   );
 };
 
-export default GuidancePage;
+export default Guidance;
