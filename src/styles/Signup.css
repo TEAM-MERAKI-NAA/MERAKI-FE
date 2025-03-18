@@ -142,3 +142,32 @@
     background: #009d1d;
     color: #ffffff;
 }
+/* Flexbox container for aligning input and button */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+/* Adjust input width to accommodate the button */
+.input-container .input {
+    flex: 1;
+}
+
+/* Button styling */
+.send-otp-btn, .confirm-btn {
+    background-color: #388e3c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+.send-otp-btn:hover, .confirm-btn:hover {
+    background-color: #388e3c;
+}
+
