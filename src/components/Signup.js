@@ -1,28 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 import "../styles/Signup.css";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 
 export const Signup = () => {
     const navigate = useNavigate();
 
-    // State for form inputs
     const [formData, setFormData] = useState({
         username: "",
         email: "",
         password: "",
     });
 
-    const [error, setError] = useState(""); // Handle errors
-    const [loading, setLoading] = useState(false); // Loading state
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    // Handle input change
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Form validation before sending API request
     const validateForm = () => {
         const { username, email, password } = formData;
 
@@ -31,47 +29,67 @@ export const Signup = () => {
             return false;
         }
 
-        // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setError("Invalid email format.");
             return false;
         }
 
-        // Password length check
         if (password.length < 6) {
             setError("Password must be at least 6 characters.");
             return false;
         }
 
-        setError(""); // Clear errors if all checks pass
+        setError(""); 
         return true;
     };
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) return;
-        console.log(formData)
-        setLoading(true); // Start loading
+
+        setLoading(true);
+        setError("");
+        setSuccess("");
+
         try {
-            const response = await axios.post("http://4.206.179.192:8000/auth/api/register/", formData, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+            // Convert formData object into FormData (for multipart/form-data)
+            const formDataToSend = new FormData();
+            formDataToSend.append("username", formData.username);
+            formDataToSend.append("email", formData.email);
+            formDataToSend.append("password", formData.password);
+
+            console.log("Sending Form Data:", Object.fromEntries(formDataToSend)); // Debugging
+
+            const response = await axios.post(
+                "http://4.206.179.192:8000/auth/api/register/",
+                formDataToSend,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            console.log("Response:", response.data);
 
             if (response.status === 201) {
-                console.log("User registered successfully:", response.data);
-                navigate("/dashboard"); // Redirect to dashboard on success
+                setSuccess("User registered successfully! Redirecting...");
+                setTimeout(() => navigate("/dashboard"), 2000);
             } else {
                 setError("Registration failed. Please try again.");
             }
         } catch (error) {
-            setError(error.response?.data?.message || "Something went wrong. Please try again later.");
+            console.error("Error Response:", error.response?.data);
+            setError(
+                error.response?.data?.message ||
+                error.response?.data?.error ||
+                JSON.stringify(error.response?.data) ||
+                "Something went wrong. Please try again."
+            );
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
 
@@ -82,7 +100,8 @@ export const Signup = () => {
                 <div className="underline"></div>
             </div>
 
-            {error && <div className="error-message">{error}</div>} {/* Show errors */}
+            {error && <div className="error-message">{error}</div>}
+            {success && <div className="success-message">{success}</div>}
 
             <form className="inputs" onSubmit={handleSubmit}>
                 <div className="input">
