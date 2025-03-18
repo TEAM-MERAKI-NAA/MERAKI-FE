@@ -109,7 +109,7 @@ const News = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://4.206.179.192:8000/api/fetch-from-db/",
+          "http://4.206.179.192:8000/rssparser/fetch-from-db/",
           {
             params: {
               page: currentPage, // Current page
