@@ -1,34 +1,130 @@
-import React from 'react'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/Signup.css";
 import { Link } from "react-router-dom";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaUser, FaLock } from "react-icons/fa";
 
 export const Login = () => {
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        username: "",
+        password: "",
+    });
+
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+
+        // Validate input before sending API request
+        if (!formData.username || !formData.password) {
+            setError("Username and password are required.");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            // Convert formData to FormData for multipart/form-data
+            const formDataToSend = new FormData();
+            formDataToSend.append("username", formData.username);
+            formDataToSend.append("password", formData.password);
+
+            // Debugging: Print FormData in an iterable format
+            console.log("Sending Login Data:");
+            for (let pair of formDataToSend.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
+            }
+
+            const response = await axios.post(
+                "http://4.206.179.192:8000/auth/api/login/",
+                formDataToSend,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            console.log("Response:", response.data);
+
+            if (response.status === 200 && response.data.access) {
+                // Assuming API sends a token
+                const token = response.data.access;
+
+                // Store the token in localStorage
+                localStorage.setItem("authToken", token);
+
+                // Redirect to Dashboard
+                navigate("/dashboard");
+            } else {
+                setError("Invalid login credentials. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error Response:", error.response?.data);
+            setError(
+                error.response?.data?.message ||
+                error.response?.data?.error ||
+                "Invalid login. Please check your credentials."
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
-        <div className='container'>
-
+        <div className="container">
             <div className="header">
                 <div className="text">Login</div>
                 <div className="underline"></div>
             </div>
-            <div className="inputs">
+
+            {error && <div className="error-message">{error}</div>}
+
+            <form className="inputs" onSubmit={handleSubmit}>
                 <div className="input">
-                    <FaEnvelope className="icon" />
-                    <input type="email" placeholder='Email' />
+                    <FaUser className="icon" />
+                    <input 
+                        type="text" 
+                        name="username"
+                        placeholder="Username" 
+                        value={formData.username} 
+                        onChange={handleChange} 
+                        required 
+                    />
                 </div>
                 <div className="input">
                     <FaLock className="icon" />
-                    <input type="password" placeholder='Enter Password' />
+                    <input 
+                        type="password" 
+                        name="password"
+                        placeholder="Enter Password" 
+                        value={formData.password} 
+                        onChange={handleChange} 
+                        required 
+                    />
                 </div>
-            </div>
-            <div className="forgot-password">
-                <Link to="/forgot-password">Forgot Password</Link>
-            </div>
-            <div className="submit-container">
-                <button className="submit">Login</button>
-            </div>
+
+                <div className="forgot-password">
+                    <Link to="/forgot-password">Forgot Password</Link>
+                </div>
+
+                <div className="submit-container">
+                    <button className="submit" type="submit" disabled={loading}>
+                        {loading ? "Logging in..." : "Login"}
+                    </button>
+                </div>
+            </form>
         </div>
-    )
-}
+    );
+};
+
 export default Login;

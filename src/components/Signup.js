@@ -75,8 +75,10 @@ export const Signup = () => {
             console.log("Response:", response.data);
 
             if (response.status === 201) {
-                setSuccess("User registered successfully! Redirecting...");
-                setTimeout(() => navigate("/dashboard"), 2000);
+                setSuccess("User registered successfully! Redirecting to login...");
+                
+                // Redirect to Login page after 2 seconds
+                setTimeout(() => navigate("/login"), 2000);
             } else {
                 setError("Registration failed. Please try again.");
             }
