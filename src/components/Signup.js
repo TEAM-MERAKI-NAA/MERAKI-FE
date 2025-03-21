@@ -66,8 +66,12 @@ export const Signup = () => {
             formDataToSend.append("last_name", formData.lastName);
             formDataToSend.append("email", formData.email);
             formDataToSend.append("password", formData.password);
+            formDataToSend.append("password2", formData.confirmPassword);
 
-            console.log("Sending Form Data:", Object.fromEntries(formDataToSend));
+            console.log("Sending Form Data:");
+            for (let pair of formDataToSend.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
+            }
 
             const response = await axios.post(
                 "http://4.206.179.192:8000/auth/api/register/",
@@ -90,6 +94,7 @@ export const Signup = () => {
             setError(
                 error.response?.data?.message ||
                 error.response?.data?.error ||
+                // JSON.stringify(error.response?.data) ||
                 "Something went wrong. Please try again."
             );
         } finally {
