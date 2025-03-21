@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import "../styles/Signup.css";
-import { FaEnvelope, FaKey } from "react-icons/fa"; 
+import React, { useState } from "react";
+import "../styles/Forgot-password.css"; // Separate CSS file
+import { FaEnvelope, FaKey } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export const ForgotPassword = () => {
@@ -51,28 +51,25 @@ export const ForgotPassword = () => {
     };
 
     return (
-        <div className='container'>
-            <div className="header">
-                <div className="text">Forgot Password</div>
-                <div className="underline"></div>
-            </div>
+        <div className="forgot-password-container">
+            <h2 className="forgot-password-title">Forgot Password</h2>
 
             {/* Error Message Display */}
             {error && <div className="error-message">{error}</div>}
 
-            {/* Email Input with Send OTP Button on the Right */}
+            {/* Email Input with Send OTP Button */}
             <div className="input-container">
-                <div className="input">
+                <div className="input forgot">
                     <FaEnvelope className="icon" />
-                    <input 
-                        type="email" 
-                        placeholder="Enter your email" 
-                        value={email} 
-                        onChange={handleEmailChange} 
-                        required 
+                    <input
+                        type="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={handleEmailChange}
+                        required
                     />
                 </div>
-                <button className="send-otp-btn" onClick={handleResetPassword}>
+                <button className="send-otp-btn forgot" onClick={handleResetPassword}>
                     Send OTP
                 </button>
             </div>
@@ -80,17 +77,17 @@ export const ForgotPassword = () => {
             {/* OTP Field (Visible after clicking Send OTP) */}
             {showOtpField && (
                 <div className="input-container">
-                    <div className="input">
+                    <div className="input forgot">
                         <FaKey className="icon" />
                         <input 
-                            type="text" 
-                            placeholder="Enter OTP" 
-                            value={otp} 
-                            onChange={handleOtpChange} 
-                            required 
+                            type="text"
+                            placeholder="Enter OTP"
+                            value={otp}
+                            onChange={handleOtpChange}
+                            required
                         />
                     </div>
-                    <button className="confirm-btn" onClick={handleConfirmOtp}>
+                    <button className="confirm-btn forgot" onClick={handleConfirmOtp}>
                         Confirm
                     </button>
                 </div>
@@ -98,7 +95,9 @@ export const ForgotPassword = () => {
 
             {/* Back to Login Link */}
             <div className="back-to-login-container">
-                <Link to="/login" className="back-to-login">Back to Login</Link>
+                <Link to="/login" className="back-to-login">
+                    Back to Login
+                </Link>
             </div>
         </div>
     );
