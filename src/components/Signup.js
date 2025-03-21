@@ -8,9 +8,11 @@ export const Signup = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        username: "",
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
+        confirmPassword: "",
     });
 
     const [error, setError] = useState("");
@@ -22,9 +24,9 @@ export const Signup = () => {
     };
 
     const validateForm = () => {
-        const { username, email, password } = formData;
+        const { firstName, lastName, email, password, confirmPassword } = formData;
 
-        if (!username || !email || !password) {
+        if (!firstName || !lastName || !email || !password || !confirmPassword) {
             setError("All fields are required.");
             return false;
         }
@@ -40,7 +42,12 @@ export const Signup = () => {
             return false;
         }
 
-        setError(""); 
+        if (password !== confirmPassword) {
+            setError("Passwords do not match.");
+            return false;
+        }
+
+        setError("");
         return true;
     };
 
@@ -54,21 +61,19 @@ export const Signup = () => {
         setSuccess("");
 
         try {
-            // Convert formData object into FormData (for multipart/form-data)
             const formDataToSend = new FormData();
-            formDataToSend.append("username", formData.username);
+            formDataToSend.append("first_name", formData.firstName);
+            formDataToSend.append("last_name", formData.lastName);
             formDataToSend.append("email", formData.email);
             formDataToSend.append("password", formData.password);
 
-            console.log("Sending Form Data:", Object.fromEntries(formDataToSend)); // Debugging
+            console.log("Sending Form Data:", Object.fromEntries(formDataToSend));
 
             const response = await axios.post(
                 "http://4.206.179.192:8000/auth/api/register/",
                 formDataToSend,
                 {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
+                    headers: { "Content-Type": "multipart/form-data" },
                 }
             );
 
@@ -76,8 +81,6 @@ export const Signup = () => {
 
             if (response.status === 201) {
                 setSuccess("User registered successfully! Redirecting to login...");
-                
-                // Redirect to Login page after 2 seconds
                 setTimeout(() => navigate("/login"), 2000);
             } else {
                 setError("Registration failed. Please try again.");
@@ -87,7 +90,6 @@ export const Signup = () => {
             setError(
                 error.response?.data?.message ||
                 error.response?.data?.error ||
-                JSON.stringify(error.response?.data) ||
                 "Something went wrong. Please try again."
             );
         } finally {
@@ -97,54 +99,86 @@ export const Signup = () => {
 
     return (
         <div className="container">
-            <div className="header">
-                <div className="text">Sign Up</div>
-                <div className="underline"></div>
+            <div className="signup-card">
+                <h2 className="signup-title">Sign Up</h2>
+
+                {error && <div className="error-message">{error}</div>}
+                {success && <div className="success-message">{success}</div>}
+
+                <form className="form-container" onSubmit={handleSubmit}>
+                    <div className="inputs">
+                        <div className="row">
+                            <div className="input">
+                                <FaUser className="icon" />
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    placeholder="First Name"
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="input">
+                                <FaUser className="icon" />
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    placeholder="Last Name"
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="input full-width">
+                            <FaEnvelope className="icon" />
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        <div className="password-container">
+                            <div className="input">
+                                <FaLock className="icon" />
+                                <input
+                                    type="password"
+                                    name="password"
+                                    placeholder="Enter Password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="input">
+                                <FaLock className="icon" />
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    placeholder="Confirm Password"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <button className="submit" type="submit" disabled={loading}>
+                            {loading ? "Signing Up..." : "Sign Up"}
+                        </button>
+                    </div>
+                </form>
+
+                <div className="back-to-login-container">
+                    <a href="/login" className="back-to-login">Already have an account? Log in</a>
+                </div>
             </div>
-
-            {error && <div className="error-message">{error}</div>}
-            {success && <div className="success-message">{success}</div>}
-
-            <form className="inputs" onSubmit={handleSubmit}>
-                <div className="input">
-                    <FaUser className="icon" />
-                    <input 
-                        type="text" 
-                        name="username" 
-                        placeholder="Username" 
-                        value={formData.username} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </div>
-                <div className="input">
-                    <FaEnvelope className="icon" />
-                    <input 
-                        type="email" 
-                        name="email" 
-                        placeholder="Email" 
-                        value={formData.email} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </div>
-                <div className="input">
-                    <FaLock className="icon" />
-                    <input 
-                        type="password" 
-                        name="password" 
-                        placeholder="Enter Password" 
-                        value={formData.password} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </div>
-                <div className="submit-container">
-                    <button className="submit" type="submit" disabled={loading}>
-                        {loading ? "Signing Up..." : "Sign Up"}
-                    </button>
-                </div>
-            </form>
         </div>
     );
 };
