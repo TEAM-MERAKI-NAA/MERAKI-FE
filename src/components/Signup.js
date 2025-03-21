@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/Signup.css";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaKey } from "react-icons/fa";
 
 export const Signup = () => {
     const navigate = useNavigate();
@@ -15,12 +15,18 @@ export const Signup = () => {
         confirmPassword: "",
     });
 
+    const [otp, setOtp] = useState(""); // Stores OTP input
+    const [showOtpField, setShowOtpField] = useState(false); // Controls form display
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleOtpChange = (e) => {
+        setOtp(e.target.value);
     };
 
     const validateForm = () => {
@@ -51,7 +57,8 @@ export const Signup = () => {
         return true;
     };
 
-    const handleSubmit = async (e) => {
+    // Function to handle Signup API
+    const handleSignup = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) return;
@@ -68,7 +75,7 @@ export const Signup = () => {
             formDataToSend.append("password", formData.password);
             formDataToSend.append("password2", formData.confirmPassword);
 
-            console.log("Sending Form Data:");
+            console.log("Sending Signup Data:");
             for (let pair of formDataToSend.entries()) {
                 console.log(pair[0] + ": " + pair[1]);
             }
@@ -84,8 +91,8 @@ export const Signup = () => {
             console.log("Response:", response.data);
 
             if (response.status === 201) {
-                setSuccess("User registered successfully! Redirecting to login...");
-                setTimeout(() => navigate("/login"), 2000);
+                setSuccess("User registered successfully! Please check your email for OTP.");
+                setShowOtpField(true); // Show OTP input field after successful signup
             } else {
                 setError("Registration failed. Please try again.");
             }
@@ -94,8 +101,56 @@ export const Signup = () => {
             setError(
                 error.response?.data?.message ||
                 error.response?.data?.error ||
-                // JSON.stringify(error.response?.data) ||
                 "Something went wrong. Please try again."
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Function to handle OTP Verification
+    const handleVerifyOtp = async () => {
+        if (!otp) {
+            setError("Please enter the OTP.");
+            return;
+        }
+
+        setLoading(true);
+        setError("");
+        setSuccess("");
+
+        try {
+            const formDataToSend = new FormData();
+            formDataToSend.append("email", formData.email);
+            formDataToSend.append("otp", otp);
+
+            console.log("Verifying OTP:");
+            for (let pair of formDataToSend.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
+            }
+
+            const response = await axios.post(
+                "http://4.206.179.192:8000/auth/api/verify-email/",
+                formDataToSend,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                }
+            );
+
+            console.log("OTP Verification Response:", response.data);
+
+            if (response.status === 200) {
+                setSuccess("OTP verified successfully! Redirecting to login...");
+                setTimeout(() => navigate("/login"), 2000);
+            } else {
+                setError("Invalid OTP. Please try again.");
+            }
+        } catch (error) {
+            console.error("OTP Error Response:", error.response?.data);
+            setError(
+                error.response?.data?.message ||
+                error.response?.data?.error ||
+                "Invalid OTP. Please check your email."
             );
         } finally {
             setLoading(false);
@@ -110,79 +165,94 @@ export const Signup = () => {
                 {error && <div className="error-message">{error}</div>}
                 {success && <div className="success-message">{success}</div>}
 
-                <form className="form-container" onSubmit={handleSubmit}>
-                    <div className="inputs">
-                        <div className="row">
-                            <div className="input">
-                                <FaUser className="icon" />
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    placeholder="First Name"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                    required
-                                />
+                {!showOtpField ? (
+                    <form className="form-container" onSubmit={handleSignup}>
+                        <div className="inputs">
+                            <div className="row">
+                                <div className="input">
+                                    <FaUser className="icon" />
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        placeholder="First Name"
+                                        value={formData.firstName}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="input">
+                                    <FaUser className="icon" />
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        placeholder="Last Name"
+                                        value={formData.lastName}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
                             </div>
-                            <div className="input">
-                                <FaUser className="icon" />
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    placeholder="Last Name"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                        </div>
 
+                            <div className="input full-width">
+                                <FaEnvelope className="icon" />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+
+                            <div className="password-container">
+                                <div className="input">
+                                    <FaLock className="icon" />
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        placeholder="Enter Password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="input">
+                                    <FaLock className="icon" />
+                                    <input
+                                        type="password"
+                                        name="confirmPassword"
+                                        placeholder="Confirm Password"
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <button className="submit" type="submit" disabled={loading}>
+                                {loading ? "Signing Up..." : "Sign Up"}
+                            </button>
+                        </div>
+                    </form>
+                ) : (
+                    <div className="otp-container">
                         <div className="input full-width">
-                            <FaEnvelope className="icon" />
+                            <FaKey className="icon" />
                             <input
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                value={formData.email}
-                                onChange={handleChange}
+                                type="text"
+                                placeholder="Enter OTP"
+                                value={otp}
+                                onChange={handleOtpChange}
                                 required
                             />
                         </div>
 
-                        <div className="password-container">
-                            <div className="input">
-                                <FaLock className="icon" />
-                                <input
-                                    type="password"
-                                    name="password"
-                                    placeholder="Enter Password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                            <div className="input">
-                                <FaLock className="icon" />
-                                <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    placeholder="Confirm Password"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <button className="submit" type="submit" disabled={loading}>
-                            {loading ? "Signing Up..." : "Sign Up"}
+                        <button className="submit" onClick={handleVerifyOtp} disabled={loading}>
+                            {loading ? "Verifying OTP..." : "Confirm"}
                         </button>
                     </div>
-                </form>
-
-                <div className="back-to-login-container">
-                    <a href="/login" className="back-to-login">Already have an account? Log in</a>
-                </div>
+                )}
             </div>
         </div>
     );
