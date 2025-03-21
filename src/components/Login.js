@@ -1,18 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../styles/Signup.css"; // Using the same stylesheet as signup
-import { Link } from "react-router-dom";
+import "../styles/Signup.css";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export const Login = () => {
     const navigate = useNavigate();
-
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-    });
-
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -44,28 +39,24 @@ export const Login = () => {
             const response = await axios.post(
                 "http://4.206.179.192:8000/auth/api/login/",
                 formDataToSend,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
+                { headers: { "Content-Type": "multipart/form-data" } }
             );
 
             console.log("Response:", response.data);
 
-            if (response.status === 200 && response.data.access) {
-                const token = response.data.access;
-                localStorage.setItem("authToken", token);
-                
-                // Redirect to dashboard only if email exists
+            if (response.status === 200 && response.data.access && response.data.refresh) {
+                // Store tokens in localStorage
+                localStorage.setItem("accessToken", response.data.access);
+                localStorage.setItem("refreshToken", response.data.refresh);
+
+                // Redirect to Dashboard
                 navigate("/dashboard");
             } else {
                 setError("Invalid login credentials. Please try again.");
             }
         } catch (error) {
             console.error("Error Response:", error.response?.data);
-            
-            // Handle specific API errors
+
             if (error.response?.status === 400) {
                 setError("Invalid email or password. Please try again.");
             } else if (error.response?.status === 404) {
