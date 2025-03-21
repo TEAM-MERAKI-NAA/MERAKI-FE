@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../styles/Signup.css";
+import "../styles/Signup.css"; // Using the same stylesheet as signup
 import { Link } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 
@@ -25,7 +25,6 @@ export const Login = () => {
         setLoading(true);
         setError("");
 
-        // Validate input before sending API request
         if (!formData.username || !formData.password) {
             setError("Username and password are required.");
             setLoading(false);
@@ -33,12 +32,10 @@ export const Login = () => {
         }
 
         try {
-            // Convert formData to FormData for multipart/form-data
             const formDataToSend = new FormData();
             formDataToSend.append("username", formData.username);
             formDataToSend.append("password", formData.password);
 
-            // Debugging: Print FormData in an iterable format
             console.log("Sending Login Data:");
             for (let pair of formDataToSend.entries()) {
                 console.log(pair[0] + ": " + pair[1]);
@@ -57,13 +54,8 @@ export const Login = () => {
             console.log("Response:", response.data);
 
             if (response.status === 200 && response.data.access) {
-                // Assuming API sends a token
                 const token = response.data.access;
-
-                // Store the token in localStorage
                 localStorage.setItem("authToken", token);
-
-                // Redirect to Dashboard
                 navigate("/dashboard");
             } else {
                 setError("Invalid login credentials. Please try again.");
@@ -82,47 +74,46 @@ export const Login = () => {
 
     return (
         <div className="container">
-            <div className="header">
-                <div className="text">Login</div>
-                <div className="underline"></div>
+            <div className="login-card">
+                <h2 className="login-title">Login</h2>
+
+                {error && <div className="error-message">{error}</div>}
+
+                <form className="form-container" onSubmit={handleSubmit}>
+                    <div className="inputs">
+                        <div className="input">
+                            <FaUser className="icon" />
+                            <input 
+                                type="text" 
+                                name="username"
+                                placeholder="Username" 
+                                value={formData.username} 
+                                onChange={handleChange} 
+                                required 
+                            />
+                        </div>
+                        <div className="input">
+                            <FaLock className="icon" />
+                            <input 
+                                type="password" 
+                                name="password"
+                                placeholder="Enter Password" 
+                                value={formData.password} 
+                                onChange={handleChange} 
+                                required 
+                            />
+                        </div>
+
+                        <div className="forgot-password">
+                            <Link to="/forgot-password">Forgot Password?</Link>
+                        </div>
+
+                        <button className="submit" type="submit" disabled={loading}>
+                            {loading ? "Logging in..." : "Login"}
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            {error && <div className="error-message">{error}</div>}
-
-            <form className="inputs" onSubmit={handleSubmit}>
-                <div className="input">
-                    <FaUser className="icon" />
-                    <input 
-                        type="text" 
-                        name="username"
-                        placeholder="Username" 
-                        value={formData.username} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </div>
-                <div className="input">
-                    <FaLock className="icon" />
-                    <input 
-                        type="password" 
-                        name="password"
-                        placeholder="Enter Password" 
-                        value={formData.password} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </div>
-
-                <div className="forgot-password">
-                    <Link to="/forgot-password">Forgot Password</Link>
-                </div>
-
-                <div className="submit-container">
-                    <button className="submit" type="submit" disabled={loading}>
-                        {loading ? "Logging in..." : "Login"}
-                    </button>
-                </div>
-            </form>
         </div>
     );
 };
