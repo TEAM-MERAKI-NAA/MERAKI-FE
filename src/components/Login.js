@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/Signup.css"; // Using the same stylesheet as signup
 import { Link } from "react-router-dom";
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 
 export const Login = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        username: "",
+        email: "",
         password: "",
     });
 
@@ -25,15 +25,15 @@ export const Login = () => {
         setLoading(true);
         setError("");
 
-        if (!formData.username || !formData.password) {
-            setError("Username and password are required.");
+        if (!formData.email || !formData.password) {
+            setError("Email and password are required.");
             setLoading(false);
             return;
         }
 
         try {
             const formDataToSend = new FormData();
-            formDataToSend.append("username", formData.username);
+            formDataToSend.append("email", formData.email);
             formDataToSend.append("password", formData.password);
 
             console.log("Sending Login Data:");
@@ -56,17 +56,27 @@ export const Login = () => {
             if (response.status === 200 && response.data.access) {
                 const token = response.data.access;
                 localStorage.setItem("authToken", token);
+                
+                // Redirect to dashboard only if email exists
                 navigate("/dashboard");
             } else {
                 setError("Invalid login credentials. Please try again.");
             }
         } catch (error) {
             console.error("Error Response:", error.response?.data);
-            setError(
-                error.response?.data?.message ||
-                error.response?.data?.error ||
-                "Invalid login. Please check your credentials."
-            );
+            
+            // Handle specific API errors
+            if (error.response?.status === 400) {
+                setError("Invalid email or password. Please try again.");
+            } else if (error.response?.status === 404) {
+                setError("User not found. Please register first.");
+            } else {
+                setError(
+                    error.response?.data?.message ||
+                    error.response?.data?.error ||
+                    "Something went wrong. Please try again."
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -82,12 +92,12 @@ export const Login = () => {
                 <form className="form-container" onSubmit={handleSubmit}>
                     <div className="inputs">
                         <div className="input">
-                            <FaUser className="icon" />
+                            <FaEnvelope className="icon" />
                             <input 
-                                type="text" 
-                                name="username"
-                                placeholder="Username" 
-                                value={formData.username} 
+                                type="email" 
+                                name="email"
+                                placeholder="Email" 
+                                value={formData.email} 
                                 onChange={handleChange} 
                                 required 
                             />
