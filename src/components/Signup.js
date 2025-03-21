@@ -15,8 +15,8 @@ export const Signup = () => {
         confirmPassword: "",
     });
 
-    const [otp, setOtp] = useState(""); // Stores OTP input
-    const [showOtpField, setShowOtpField] = useState(false); // Controls form display
+    const [otp, setOtp] = useState("");
+    const [showOtpField, setShowOtpField] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
@@ -57,7 +57,6 @@ export const Signup = () => {
         return true;
     };
 
-    // Function to handle Signup API
     const handleSignup = async (e) => {
         e.preventDefault();
 
@@ -75,10 +74,7 @@ export const Signup = () => {
             formDataToSend.append("password", formData.password);
             formDataToSend.append("password2", formData.confirmPassword);
 
-            console.log("Sending Signup Data:");
-            for (let pair of formDataToSend.entries()) {
-                console.log(pair[0] + ": " + pair[1]);
-            }
+            console.log("Sending Signup Data:", Object.fromEntries(formDataToSend));
 
             const response = await axios.post(
                 "http://4.206.179.192:8000/auth/api/register/",
@@ -92,7 +88,7 @@ export const Signup = () => {
 
             if (response.status === 201) {
                 setSuccess("User registered successfully! Please check your email for OTP.");
-                setShowOtpField(true); // Show OTP input field after successful signup
+                setShowOtpField(true);
             } else {
                 setError("Registration failed. Please try again.");
             }
@@ -108,7 +104,6 @@ export const Signup = () => {
         }
     };
 
-    // Function to handle OTP Verification
     const handleVerifyOtp = async () => {
         if (!otp) {
             setError("Please enter the OTP.");
@@ -124,10 +119,7 @@ export const Signup = () => {
             formDataToSend.append("email", formData.email);
             formDataToSend.append("otp", otp);
 
-            console.log("Verifying OTP:");
-            for (let pair of formDataToSend.entries()) {
-                console.log(pair[0] + ": " + pair[1]);
-            }
+            console.log("Verifying OTP:", Object.fromEntries(formDataToSend));
 
             const response = await axios.post(
                 "http://4.206.179.192:8000/auth/api/verify-email/",
@@ -166,92 +158,105 @@ export const Signup = () => {
                 {success && <div className="success-message">{success}</div>}
 
                 {!showOtpField ? (
-                    <form className="form-container" onSubmit={handleSignup}>
-                        <div className="inputs">
-                            <div className="row">
-                                <div className="input">
-                                    <FaUser className="icon" />
-                                    <input
-                                        type="text"
-                                        name="firstName"
-                                        placeholder="First Name"
-                                        value={formData.firstName}
-                                        onChange={handleChange}
-                                        required
-                                    />
+                    <>
+                        <form className="form-container" onSubmit={handleSignup}>
+                            <div className="inputs">
+                                <div className="row">
+                                    <div className="input">
+                                        <FaUser className="icon" />
+                                        <input
+                                            type="text"
+                                            name="firstName"
+                                            placeholder="First Name"
+                                            value={formData.firstName}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="input">
+                                        <FaUser className="icon" />
+                                        <input
+                                            type="text"
+                                            name="lastName"
+                                            placeholder="Last Name"
+                                            value={formData.lastName}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
                                 </div>
-                                <div className="input">
-                                    <FaUser className="icon" />
-                                    <input
-                                        type="text"
-                                        name="lastName"
-                                        placeholder="Last Name"
-                                        value={formData.lastName}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                            </div>
 
+                                <div className="input full-width">
+                                    <FaEnvelope className="icon" />
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="password-container">
+                                    <div className="input">
+                                        <FaLock className="icon" />
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            placeholder="Enter Password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="input">
+                                        <FaLock className="icon" />
+                                        <input
+                                            type="password"
+                                            name="confirmPassword"
+                                            placeholder="Confirm Password"
+                                            value={formData.confirmPassword}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <button className="submit" type="submit" disabled={loading}>
+                                    {loading ? "Signing Up..." : "Sign Up"}
+                                </button>
+                            </div>
+                        </form>
+
+                        <div className="back-to-login-container">
+                            <a href="/login" className="back-to-login">Already have an account? Log in</a>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <h3>Enter OTP</h3>
+                        <div className="otp-container">
                             <div className="input full-width">
-                                <FaEnvelope className="icon" />
+                                <FaKey className="icon" />
                                 <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Email"
-                                    value={formData.email}
-                                    onChange={handleChange}
+                                    type="text"
+                                    placeholder="Enter OTP"
+                                    value={otp}
+                                    onChange={handleOtpChange}
                                     required
                                 />
                             </div>
 
-                            <div className="password-container">
-                                <div className="input">
-                                    <FaLock className="icon" />
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        placeholder="Enter Password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="input">
-                                    <FaLock className="icon" />
-                                    <input
-                                        type="password"
-                                        name="confirmPassword"
-                                        placeholder="Confirm Password"
-                                        value={formData.confirmPassword}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <button className="submit" type="submit" disabled={loading}>
-                                {loading ? "Signing Up..." : "Sign Up"}
+                            <button className="submit" onClick={handleVerifyOtp} disabled={loading}>
+                                {loading ? "Verifying OTP..." : "Confirm"}
                             </button>
                         </div>
-                    </form>
-                ) : (
-                    <div className="otp-container">
-                        <div className="input full-width">
-                            <FaKey className="icon" />
-                            <input
-                                type="text"
-                                placeholder="Enter OTP"
-                                value={otp}
-                                onChange={handleOtpChange}
-                                required
-                            />
-                        </div>
 
-                        <button className="submit" onClick={handleVerifyOtp} disabled={loading}>
-                            {loading ? "Verifying OTP..." : "Confirm"}
-                        </button>
-                    </div>
+                        <div className="back-to-login-container">
+                            <a href="/login" className="back-to-login">Already have an account? Log in</a>
+                        </div>
+                    </>
                 )}
             </div>
         </div>
