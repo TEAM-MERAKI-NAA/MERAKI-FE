@@ -1,94 +1,132 @@
 import React, { useState } from "react";
-import "../styles/Forgot-password.css"; // Separate CSS file
-import { FaEnvelope, FaKey } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../styles/Forgot-password.css";
+import { FaEnvelope, FaKey, FaLock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export const ForgotPassword = () => {
-    const [email, setEmail] = useState("");
+    const navigate = useNavigate();
+    const [email, setEmail] = useState("");  // Store email persistently
     const [otp, setOtp] = useState("");
-    const [showOtpField, setShowOtpField] = useState(false);
+    const [newPassword, setNewPassword] = useState("");
+    const [showResetFields, setShowResetFields] = useState(false);
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-        setError(""); // Clear error when user starts typing
-    };
-
-    const handleOtpChange = (e) => {
-        setOtp(e.target.value);
-    };
+    // Handle input changes
+    const handleEmailChange = (e) => setEmail(e.target.value);
+    const handleOtpChange = (e) => setOtp(e.target.value);
+    const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
 
     // Email validation function
-    const isValidEmail = (email) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+    const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    // Function to send OTP
+    const handleSendOtp = async () => {
+        if (!email || !isValidEmail(email)) {
+            setError("Please enter a valid email address.");
+            return;
+        }
+
+        try {
+            const response = await axios.post(
+                "http://4.206.179.192:8000/auth/api/forgot-password/",
+                { email }, // Send email to the API
+                { headers: { "Content-Type": "application/json" } }
+            );
+
+            console.log("✅ OTP Sent:", response.data);
+            setSuccess("OTP sent successfully. Check your email!");
+            setShowResetFields(true);  // Show OTP & password fields
+            setError(""); // Clear previous errors
+        } catch (error) {
+            console.error("❌ Error Sending OTP:", error.response?.data);
+            setError(error.response?.data?.message || "Failed to send OTP.");
+        }
     };
 
-    const handleResetPassword = () => {
-        if (!email) {
-            setError("Please enter your email.");
+    // Function to reset password
+    const handleResetPassword = async () => {
+        if (!email || !otp || !newPassword) {
+            setError("All fields (Email, OTP, and New Password) are required.");
             return;
         }
 
-        if (!isValidEmail(email)) {
-            setError("Invalid email format. Please enter a valid email.");
-            return;
+        try {
+
+            const response = await axios.post(
+                "http://4.206.179.192:8000/auth/api/reset-password/",
+                { email, otp, password: newPassword }, // Ensure email is included
+                { headers: { "Content-Type": "application/json" } }
+            );
+
+            setSuccess("Password reset successful! Redirecting to login...");
+            setTimeout(() => navigate("/login"), 3000);
+            setError("");
+        } catch (error) {
+            setError(
+                error.response?.data?.message ||
+                error.response?.data?.error ||
+                "Error resetting password."
+            );
         }
-
-        // If email is valid, proceed with OTP request
-        console.log("Sending OTP to:", email);
-        setShowOtpField(true);
-    };
-
-    const handleConfirmOtp = () => {
-        if (!otp) {
-            alert("Please enter the OTP.");
-            return;
-        }
-
-        console.log("Verifying OTP:", otp);
-        alert("OTP Verified! You can now reset your password.");
     };
 
     return (
         <div className="forgot-password-container">
             <h2 className="forgot-password-title">Forgot Password</h2>
 
-            {/* Error Message Display */}
+            {/* Display messages */}
             {error && <div className="error-message">{error}</div>}
+            {success && <div className="success-message">{success}</div>}
 
-            {/* Email Input with Send OTP Button */}
-            <div className="input-container">
-                <div className="input forgot">
-                    <FaEnvelope className="icon" />
-                    <input
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={handleEmailChange}
-                        required
-                    />
-                </div>
-                <button className="send-otp-btn forgot" onClick={handleResetPassword}>
-                    Send OTP
-                </button>
-            </div>
-
-            {/* OTP Field (Visible after clicking Send OTP) */}
-            {showOtpField && (
+            {/* Step 1: Enter Email & Send OTP */}
+            {!showResetFields ? (
                 <div className="input-container">
                     <div className="input forgot">
-                        <FaKey className="icon" />
-                        <input 
-                            type="text"
-                            placeholder="Enter OTP"
-                            value={otp}
-                            onChange={handleOtpChange}
+                        <FaEnvelope className="icon" />
+                        <input
+                            type="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={handleEmailChange}
                             required
                         />
                     </div>
-                    <button className="confirm-btn forgot" onClick={handleConfirmOtp}>
-                        Confirm
+                    <button className="send-otp-btn forgot" onClick={handleSendOtp}>
+                        Send OTP
+                    </button>
+                </div>
+            ) : (
+                // Step 2: Enter OTP & New Password
+                <div>
+                    <div className="input-container">
+                        <div className="input forgot">
+                            <FaKey className="icon" />
+                            <input
+                                type="text"
+                                placeholder="Enter OTP"
+                                value={otp}
+                                onChange={handleOtpChange}
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div className="input-container">
+                        <div className="input forgot">
+                            <FaLock className="icon" />
+                            <input
+                                type="password"
+                                placeholder="Enter New Password"
+                                value={newPassword}
+                                onChange={handleNewPasswordChange}
+                                required
+                            />
+                        </div>
+                    </div>
+                    <button className="confirm-btn forgot" onClick={handleResetPassword}>
+                        Reset Password
                     </button>
                 </div>
             )}
