@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ReactPaginate from "react-paginate";
 import "../styles/News.css";
 
 // Hero Section Component
@@ -73,58 +74,50 @@ function Navbar() {
   );
 }
 
-// News Component
+const categoryAPIs = {
+  all: "http://4.206.179.192:8000/rssparser/fetch-from-db/",
+  backgrounders:
+    "http://4.206.179.192:8000/rssparser/categories/backgrounders/",
+  "media-advisories":
+    "http://4.206.179.192:8000/rssparser/categories/media-advisories/",
+  "news-release":
+    "http://4.206.179.192:8000/rssparser/categories/news-releases/",
+  speeches: "http://4.206.179.192:8000/rssparser/categories/speeches/",
+  statements: "http://4.206.179.192:8000/rssparser/categories/statements/",
+};
+
 const News = () => {
   const [news, setNews] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [category, setCategory] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const [totalPages, setTotalPages] = useState(1); // Total number of pages
-  const [totalNews, setTotalNews] = useState(0); // Total number of news articles
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const pageSize = 10; // Number of news items per page
+  const pageSize = 15; // Set to 15 items per page
 
-  // // Fetching categories
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "http://4.206.179.192:8000/api/categories/news-releases/"
-  //       );
-  //       setCategories(response.data);
-  //     } catch (error) {
-  //       setError("Error loading categories.");
-  //       console.error("Category fetch error:", error);
-  //     }
-  //   };
-
-  //   fetchCategories();
-  // }, []);
-
-  // Fetching news based on category and current page
   useEffect(() => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          "http://4.206.179.192:8000/rssparser/fetch-from-db/",
-          {
-            params: {
-              page: currentPage, // Current page
-              page_size: pageSize, // Number of articles per page
-              category: category === "all" ? "" : category, // Filter by category
-            },
-          }
-        );
+        const response = await axios.get(categoryAPIs[category], {
+          params: {
+            page: currentPage,
+            page_size: pageSize,
+          },
+        });
 
-        // Debugging: Log the response data
+        // Check the API response structure
         console.log("Fetched News:", response.data);
 
-        setNews(response.data.data); // Set the paginated news articles
-        setTotalNews(response.data.total); // Set the total number of articles (for pagination)
-        setTotalPages(Math.ceil(response.data.total / pageSize)); // Calculate the total pages
+        if (response.data && response.data.length > 0) {
+          setNews(response.data); // Assuming data is an array of news items
+          setTotalPages(Math.ceil(response.data.length / pageSize)); // Update total pages
+        } else {
+          setNews([]); // Set empty news if no articles
+          setTotalPages(1); // Set total pages to 1 if no articles
+        }
+
         setLoading(false);
       } catch (error) {
         setError("Error loading news.");
@@ -136,20 +129,15 @@ const News = () => {
     fetchNews();
   }, [currentPage, category]);
 
-  // Handle category change
   const handleCategoryChange = (newCategory) => {
     setCategory(newCategory);
-    setCurrentPage(1); // Reset to the first page when category changes
+    setCurrentPage(1); // Reset to first page when category changes
   };
 
-  // Change page
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
-  // Loading and error handling
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -163,14 +151,21 @@ const News = () => {
       {/* Categories Section */}
       <div className="category-filters">
         <button onClick={() => handleCategoryChange("all")}>All</button>
-        {categories.map((cat, index) => (
-          <button
-            key={index}
-            onClick={() => handleCategoryChange(cat.category)}
-          >
-            {cat.category}
-          </button>
-        ))}
+        <button onClick={() => handleCategoryChange("backgrounders")}>
+          Backgrounders
+        </button>
+        <button onClick={() => handleCategoryChange("news-release")}>
+          News Releases
+        </button>
+        <button onClick={() => handleCategoryChange("speeches")}>
+          Speeches
+        </button>
+        <button onClick={() => handleCategoryChange("statements")}>
+          Statements
+        </button>
+        <button onClick={() => handleCategoryChange("media-advisories")}>
+          Media Advisories
+        </button>
       </div>
 
       {/* News List */}
@@ -192,21 +187,14 @@ const News = () => {
 
       {/* Pagination */}
       <div className="pagination">
-        <button
-          disabled={currentPage === 1}
-          onClick={() => handlePageChange(currentPage - 1)}
-        >
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => handlePageChange(currentPage + 1)}
-        >
-          Next
-        </button>
+        <ReactPaginate
+          pageCount={totalPages}
+          pageRangeDisplayed={5}
+          marginPagesDisplayed={2}
+          onPageChange={(data) => handlePageChange(data.selected + 1)}
+          containerClassName={"pagination-container"}
+          activeClassName={"active"}
+        />
       </div>
     </div>
   );
