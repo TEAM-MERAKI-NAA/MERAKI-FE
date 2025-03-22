@@ -100,32 +100,19 @@ const News = () => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-<<<<<<< HEAD
         const response = await axios.get(categoryAPIs[category], {
           params: {
             page: currentPage,
             page_size: pageSize,
           },
         });
-=======
-        const response = await axios.get(
-          "http://4.206.179.192:8000/rssparser/fetch-from-db/",
-          {
-            params: {
-              page: currentPage, // Current page
-              page_size: pageSize, // Number of articles per page
-              category: category === "all" ? "" : category, // Filter by category
-            },
-          }
-        );
->>>>>>> yash-workspace
 
         // Check the API response structure
         console.log("Fetched News:", response.data);
 
         if (response.data && response.data.length > 0) {
-          setNews(response.data); // Assuming data is an array of news items
-          setTotalPages(Math.ceil(response.data.length / pageSize)); // Update total pages
+          setNews(response.data);
+          setTotalPages(Math.ceil(response.data.length / pageSize));
         } else {
           setNews([]); // Set empty news if no articles
           setTotalPages(1); // Set total pages to 1 if no articles
