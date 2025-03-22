@@ -15,63 +15,121 @@ export const Login = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+    //     setError("");
+
+    //     if (!formData.email || !formData.password) {
+    //         setError("Email and password are required.");
+    //         setLoading(false);
+    //         return;
+    //     }
+
+    //     try {
+    //         const formDataToSend = new FormData();
+    //         formDataToSend.append("email", formData.email);
+    //         formDataToSend.append("password", formData.password);
+
+    //         console.log("Sending Login Data:");
+    //         for (let pair of formDataToSend.entries()) {
+    //             console.log(pair[0] + ": " + pair[1]);
+    //         }
+
+    //         const response = await axios.post(
+    //             "http://4.206.179.192:8000/auth/api/login/",
+    //             formDataToSend,
+    //             { headers: { "Content-Type": "multipart/form-data" } }
+    //         );
+
+    //         console.log("Response:", response.data);
+
+    //         if (response.status === 200 && response.data.access && response.data.refresh) {
+    //             // Store tokens in localStorage
+    //             localStorage.setItem("accessToken", response.data.access);
+    //             localStorage.setItem("refreshToken", response.data.refresh);
+
+    //             // Redirect to Dashboard
+    //             navigate("/dashboard");
+    //         } else {
+    //             setError("Invalid login credentials. Please try again.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error Response:", error.response?.data);
+
+    //         if (error.response?.status === 400) {
+    //             setError("Invalid email or password. Please try again.");
+    //         } else if (error.response?.status === 404) {
+    //             setError("User not found. Please register first.");
+    //         } else {
+    //             setError(
+    //                 error.response?.data?.message ||
+    //                 error.response?.data?.error ||
+    //                 "Something went wrong. Please try again."
+    //             );
+    //         }
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError("");
-
+    
         if (!formData.email || !formData.password) {
             setError("Email and password are required.");
             setLoading(false);
             return;
         }
-
+    
         try {
             const formDataToSend = new FormData();
             formDataToSend.append("email", formData.email);
             formDataToSend.append("password", formData.password);
-
-            console.log("Sending Login Data:");
-            for (let pair of formDataToSend.entries()) {
-                console.log(pair[0] + ": " + pair[1]);
-            }
-
+    
+            console.log("🔍 Sending Login Data:", formDataToSend);
+    
             const response = await axios.post(
                 "http://4.206.179.192:8000/auth/api/login/",
                 formDataToSend,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
-
-            console.log("Response:", response.data);
-
+    
+            console.log("✅ Login Response:", response.data);
+    
             if (response.status === 200 && response.data.access && response.data.refresh) {
-                // Store tokens in localStorage
-                localStorage.setItem("accessToken", response.data.access);
-                localStorage.setItem("refreshToken", response.data.refresh);
-
-                // Redirect to Dashboard
+                const accessToken = response.data.access;
+                const refreshToken = response.data.refresh;
+    
+                // ✅ Store tokens in localStorage
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("refreshToken", refreshToken);
+    
+                console.log("🔑 Access Token:", accessToken);
+                console.log("🔄 Refresh Token:", refreshToken);
+    
+                // ✅ Redirect user to dashboard
                 navigate("/dashboard");
             } else {
                 setError("Invalid login credentials. Please try again.");
             }
         } catch (error) {
-            console.error("Error Response:", error.response?.data);
-
+            console.error("❌ Error Response:", error.response?.data);
+    
             if (error.response?.status === 400) {
                 setError("Invalid email or password. Please try again.");
             } else if (error.response?.status === 404) {
                 setError("User not found. Please register first.");
             } else {
-                setError(
-                    error.response?.data?.message ||
-                    error.response?.data?.error ||
-                    "Something went wrong. Please try again."
-                );
+                setError(error.response?.data?.message || "Something went wrong. Please try again.");
             }
         } finally {
             setLoading(false);
         }
     };
+    
 
     return (
         <div className="container">

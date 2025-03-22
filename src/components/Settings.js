@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Sidebar from "./Sidebar"; // Import Sidebar component
 import "../styles/Settings.css";
 import { FaUser, FaLock, FaPalette, FaExclamationTriangle } from "react-icons/fa";
 
 const Settings = () => {
+    const navigate = useNavigate(); // Initialize navigate
+
     const [darkMode, setDarkMode] = useState(false);
     const [notifications, setNotifications] = useState(true);
 
@@ -18,7 +21,9 @@ const Settings = () => {
 
                 <div className="settings-section">
                     <h3><FaUser /> Profile Settings</h3>
-                    <button className="settings-btn">Edit Profile</button>
+                    <button className="settings-btn" onClick={() => navigate("/profile")}>
+                        Edit Profile
+                    </button>
                     <button className="settings-btn">Change Password</button>
                 </div>
 
