@@ -100,12 +100,25 @@ const News = () => {
     const fetchNews = async () => {
       try {
         setLoading(true);
+<<<<<<< HEAD
         const response = await axios.get(categoryAPIs[category], {
           params: {
             page: currentPage,
             page_size: pageSize,
           },
         });
+=======
+        const response = await axios.get(
+          "http://4.206.179.192:8000/rssparser/fetch-from-db/",
+          {
+            params: {
+              page: currentPage, // Current page
+              page_size: pageSize, // Number of articles per page
+              category: category === "all" ? "" : category, // Filter by category
+            },
+          }
+        );
+>>>>>>> yash-workspace
 
         // Check the API response structure
         console.log("Fetched News:", response.data);

@@ -16,6 +16,7 @@ import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
 import GuidancePage from "./components/GuidancePage";
+import PrivateRoute from "./components/PrivateRoute"; // Import PrivateRoute
 
 // Import styles
 import "./styles/LandingPage.css";
@@ -25,6 +26,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/community" element={<Community />} />
           <Route path="/homepage" element={<Homepage />} />
@@ -35,10 +37,17 @@ function App() {
           <Route path="/reminder" element={<Reminder />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/guidance" element={<GuidancePage />} />
-          <Route path="/settings" element={<Settings />} />
+
+          {/* Protected Routes (Require Authentication) */}
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
+
+          {/* Default Route - Redirect to Homepage if route not found */}
+          <Route path="*" element={<LandingPage />} />
         </Routes>
       </div>
     </Router>

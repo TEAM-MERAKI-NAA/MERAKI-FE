@@ -1,14 +1,56 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/Dashboard.css";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
-import { Line } from "react-chartjs-2"; // Import Line Chart
+import { Line } from "react-chartjs-2"; 
 import "chart.js/auto";
 import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [reminders, setReminders] = useState(["Complete Assignment", "Pay Rent", "Attend Workshop"]);
     const [newReminder, setNewReminder] = useState("");
+
+    useEffect(() => {
+        const verifyAccessToken = async () => {
+            const accessToken = localStorage.getItem("accessToken");
+            const refreshToken = localStorage.getItem("refreshToken");
+
+            if (!accessToken) {
+                if (refreshToken) {
+                    try {
+                        const response = await axios.post(
+                            "http://4.206.179.192:8000/auth/api/token/refresh/",
+                            { refresh: refreshToken }
+                        );
+                        localStorage.setItem("accessToken", response.data.access);
+                    } catch (error) {
+                        console.error("Refresh Token Expired:", error);
+                        logout();
+                    }
+                } else {
+                    logout();
+                }
+            }
+        };
+
+        verifyAccessToken();
+
+        // Prevent navigating back to Dashboard after logout
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.pushState(null, null, window.location.href);
+        };
+    }, [navigate]);
+
+    // Logout Function
+    const logout = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        navigate("/login");
+    };
 
     // Toggle Dropdown
     const toggleDropdown = () => {
@@ -59,7 +101,7 @@ const Dashboard = () => {
             <main className="dashboard-content">
                 {/* Top Bar */}
                 <div className="top-bar">
-                    <h1 className="welcome-text">Welcome Back, User!</h1>
+                    <h1 className="welcome-text">Welcome Back!</h1>
                     <div className="account-dropdown">
                         <button className="account-button" onClick={toggleDropdown}>
                             <FaUser className="icon" />
@@ -68,7 +110,9 @@ const Dashboard = () => {
                             <div className="dropdown-menu">
                                 <ul>
                                     <li className="logout">
-                                        <a href="/"><FaSignOutAlt className="icon" /> Logout</a>
+                                        <button onClick={logout}>
+                                            <FaSignOutAlt className="icon" /> Logout
+                                        </button>
                                     </li>
                                 </ul>
                             </div>
@@ -76,7 +120,7 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Dashboard Widgets (Structured like settings page sections) */}
+                {/* Dashboard Widgets */}
                 <div className="dashboard-widgets">
                     {/* Budget Overview Section (Line Chart) */}
                     <div className="widget budget-tracker">

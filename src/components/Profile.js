@@ -37,10 +37,6 @@ const Profile = () => {
                     </div>
                     <form className="profile-form" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label>Company (disabled)</label>
-                            <input type="text" value="Company Name" disabled />
-                        </div>
-                        <div className="form-group">
                             <label>Username</label>
                             <input type="text" name="username" value={formData.username} onChange={handleChange} />
                         </div>
@@ -56,22 +52,26 @@ const Profile = () => {
                             <label>Last Name</label>
                             <input type="text" name="lastName" value={formData.lastName} readOnly />
                         </div>
-                        {/* <div className="form-group">
-                            <label>Address</label>
+                        <div className="form-group">
+                            <label>Contact No. (optional)</label>
                             <input type="text" name="address" value={formData.address} onChange={handleChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Gender</label>
+                            <input type="text" name="city" value={formData.city} onChange={handleChange} />
                         </div>
                         <div className="form-group">
                             <label>City</label>
                             <input type="text" name="city" value={formData.city} onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            <label>Country</label>
+                            <label>Nationality</label>
                             <input type="text" name="country" value={formData.country} onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            <label>Postal Code</label>
+                            <label>Province</label>
                             <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} />
-                        </div>  */}
+                        </div> 
                         <div className="form-group full-width">
                             <label>About Me</label>
                             <textarea name="aboutMe" value={formData.aboutMe} onChange={handleChange}></textarea>
