@@ -111,10 +111,10 @@ const Profile = () => {
                         <h2>Edit Profile</h2>
                     </div>
                     <form className="profile-form" onSubmit={handleSubmit}>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label>Username</label>
                             <input type="text" name="username" value={formData.username} readOnly />
-                        </div>
+                        </div> */}
                         <div className="form-group">
                             <label>Email address</label>
                             <input type="email" name="email" value={formData.email} readOnly />

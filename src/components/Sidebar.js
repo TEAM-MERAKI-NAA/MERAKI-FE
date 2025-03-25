@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaUser, FaChartBar, FaCog, FaFileAlt } from "react-icons/fa";
-import "../styles/Sidebar.css"; // Ensure styles are linked properly
+import "../styles/Sidebar.css";
 
 const Sidebar = () => {
     return (
@@ -10,7 +10,7 @@ const Sidebar = () => {
             <nav>
                 <ul>
                     <li><Link to="/dashboard"><FaChartBar className="icon" /> Overview</Link></li>
-                    <li><Link to="/budget-tracker"><FaCog className="icon" /> Budget Tracker</Link></li>
+                    <li><Link to="/BudgetTracker"><FaCog className="icon" /> Budget Tracker</Link></li>
                     <li><Link to="/reminder"><FaCog className="icon" /> Set Reminders</Link></li>
                     <li><Link to="/community"><FaCog className="icon" /> Community</Link></li>
                     <li><Link to="/news"><FaCog className="icon" /> News</Link></li>

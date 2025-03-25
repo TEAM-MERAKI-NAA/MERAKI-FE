@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "axios";
 import "../styles/Dashboard.css";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
@@ -8,7 +8,7 @@ import "chart.js/auto";
 import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // Initialize navigate function
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [reminders, setReminders] = useState(["Complete Assignment", "Pay Rent", "Attend Workshop"]);
     const [newReminder, setNewReminder] = useState("");
@@ -78,6 +78,11 @@ const Dashboard = () => {
         }
     };
 
+    // Function to Handle Chart Click (Redirect to Budget Tracker)
+    const handleChartClick = () => {
+        navigate("/BudgetTracker"); // Redirect to Budget Tracker Page
+    };
+
     // Data for Line Chart (Budget Overview)
     const budgetData = {
         labels: ["Jan", "Feb", "Mar", "Apr", "May"],
@@ -122,8 +127,8 @@ const Dashboard = () => {
 
                 {/* Dashboard Widgets */}
                 <div className="dashboard-widgets">
-                    {/* Budget Overview Section (Line Chart) */}
-                    <div className="widget budget-tracker">
+                    {/* Budget Overview Section (Line Chart) - Clickable */}
+                    <div className="widget budget-tracker" onClick={handleChartClick} style={{ cursor: "pointer" }}>
                         <h3>Budget Overview</h3>
                         <Line data={budgetData} />
                     </div>

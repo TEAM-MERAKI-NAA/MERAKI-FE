@@ -140,7 +140,7 @@ export const Login = () => {
 
                 <form className="form-container" onSubmit={handleSubmit}>
                     <div className="inputs">
-                        <div className="input">
+                        <div className="input login-inputs">
                             <FaEnvelope className="icon" />
                             <input 
                                 type="email" 
@@ -151,7 +151,7 @@ export const Login = () => {
                                 required 
                             />
                         </div>
-                        <div className="input">
+                        <div className="input login-inputs">
                             <FaLock className="icon" />
                             <input 
                                 type="password" 

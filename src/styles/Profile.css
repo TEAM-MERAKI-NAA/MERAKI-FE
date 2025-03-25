@@ -128,10 +128,12 @@ input, textarea {
     font-size: 16px;
     background: transparent;
     outline: none;
+    text-align: center;
 }
 
 textarea {
     resize: none;
+    text-align: center;
 }
 
 .full-width {
