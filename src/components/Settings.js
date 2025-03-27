@@ -62,3 +62,78 @@ const Settings = () => {
 };
 
 export default Settings;
+
+// import React, { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import Sidebar from "./Sidebar";
+// import "../styles/Settings.css";
+// import { FaUser, FaExclamationTriangle, FaGlobe } from "react-icons/fa";
+
+// const Settings = () => {
+//     const navigate = useNavigate();
+
+//     const [language, setLanguage] = useState("English");
+//     const [region, setRegion] = useState("Canada");
+
+//     const handleLanguageChange = (e) => {
+//         setLanguage(e.target.value);
+//     };
+
+//     const handleRegionChange = (e) => {
+//         setRegion(e.target.value);
+//     };
+
+//     return (
+//         <div className="settings-container">
+//             <Sidebar />
+//             <main className="settings-content">
+//                 <h1 className="settings-header">⚙️ Settings</h1>
+
+//                 {/* Profile Section */}
+//                 <div className="settings-section">
+//                     <h3><FaUser /> Profile Settings</h3>
+//                     <button className="settings-btn" onClick={() => navigate("/profile")}>
+//                         Edit Profile
+//                     </button>
+//                     <button className="settings-btn">Change Password</button>
+//                 </div>
+
+//                 {/* Language & Region Section */}
+//                 <div className="settings-section">
+//                     <h3><FaGlobe /> Language & Region</h3>
+//                     <div className="language-region-group">
+//                         <label htmlFor="language">Language</label>
+//                         <select id="language" value={language} onChange={handleLanguageChange}>
+//                             <option value="English">English</option>
+//                             <option value="French">French</option>
+//                             <option value="Hindi">Hindi</option>
+//                             <option value="Spanish">Spanish</option>
+//                         </select>
+//                     </div>
+//                     <div className="language-region-group">
+//                         <label htmlFor="region">Region</label>
+//                         <select id="region" value={region} onChange={handleRegionChange}>
+//                             <option value="Canada">Canada</option>
+//                             <option value="United States">United States</option>
+//                             <option value="India">India</option>
+//                             <option value="United Kingdom">United Kingdom</option>
+//                             <option value="Nepal">Nepal</option>
+//                             <option value="China">China</option>
+//                             <option value="Japan">Japan</option>
+//                         </select>
+//                     </div>
+//                 </div>
+
+//                 {/* Account Management */}
+//                 <div className="settings-section danger-section">
+//                     <h3><FaExclamationTriangle /> Account Management</h3>
+//                     <button className="danger-btn">Delete Account</button>
+//                 </div>
+//             </main>
+//         </div>
+//     );
+// };
+
+// export default Settings;
+
+

@@ -49,7 +49,6 @@ const Dashboard = () => {
                     }
                 });
         
-                console.log("User Profile Response:", response.data); // ✅ Log response
         
                 const firstName =
                     response.data.first_name ||
