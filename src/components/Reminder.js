@@ -1,167 +1,189 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { FaPlus, FaTrash, FaCheck } from "react-icons/fa";
+import Sidebar from "./Sidebar"; // Import Sidebar
 import "../styles/Reminder.css";
-import Sidebar from "./Sidebar";
 
-export default function ReminderApp() {
-  const [reminders, setReminders] = useState([]);
-  const [newReminder, setNewReminder] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
-  const [customReminder, setCustomReminder] = useState("");
+const API_BASE_URL = "http://4.206.179.192:8000/reminder/api/reminders/";
+const BEARER_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMTE4NDc4LCJpYXQiOjE3NDMxMTgxNzgsImp0aSI6ImQzOWMyYWFkNzEyMzRlOWRhODVhMGFlYjAwZTFjNzgzIiwidXNlcl9pZCI6Nn0.QQQ_jjZiPFarWnKEXgX5D3J9ne9UxfYoaKfsmk_1yls";
+const ReminderForm = () => {
+  const [title, setTitle] = useState("");
+  const [customTitle, setCustomTitle] = useState("");
+  const [documentExpiryDate, setDocumentExpiryDate] = useState("");
   const [frequency, setFrequency] = useState("daily");
-  const [isCustomReminder, setIsCustomReminder] = useState(false); // Flag to toggle custom input visibility
+  const [isActive, setIsActive] = useState(true);
+  const [reminders, setReminders] = useState([]);
+  const [error, setError] = useState("");
 
-  const API_URL = "http://4.206.179.192:8000/reminder/api/reminders/";
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  // Fetch reminders from the API when the component mounts
-  useEffect(() => {
-    axios
-      .get(API_URL)
-      .then((response) => setReminders(response.data))
-      .catch((error) =>
-        console.error("There was an error fetching reminders!", error)
+    const newReminder = {
+      title: title === "custom" ? customTitle : title,
+      document_expiry_date: documentExpiryDate,
+      frequency,
+      is_active: isActive,
+    };
+
+    try {
+      console.log("Request Payload:", newReminder);
+
+      const response = await axios.post(API_BASE_URL, newReminder, {
+        headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+      });
+
+      console.log("Reminder Created:", response.data);
+
+      await axios.post(
+        `${API_BASE_URL}${response.data.id}/send_immediate_reminder/`,
+        newReminder,
+        {
+          headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+        }
       );
-  }, []);
 
-  // Add a new reminder
-  const addReminder = () => {
-    const reminderText = newReminder || customReminder;
+      setReminders([...reminders, response.data]);
 
-    if (reminderText.trim() && expiryDate) {
-      const newReminderData = {
-        text: reminderText,
-        expiry: expiryDate,
-        frequency,
-      };
-
-      // Send the new reminder data to the backend
-      axios
-        .post(API_URL, newReminderData)
-        .then((response) => {
-          // Update the reminders list with the newly added reminder
-          setReminders((prevReminders) => [...prevReminders, response.data]);
-
-          // Clear the input fields after adding the reminder
-          setNewReminder("");
-          setCustomReminder("");
-          setExpiryDate("");
-          setIsCustomReminder(false); // Reset to default (non-custom) reminder
-        })
-        .catch((error) =>
-          console.error("There was an error adding the reminder!", error)
+      setTitle("");
+      setCustomTitle("");
+      setDocumentExpiryDate("");
+      setFrequency("daily");
+      setIsActive(true);
+    } catch (err) {
+      if (err.response) {
+        console.error("Error creating reminder:", err.response);
+        setError(
+          `Error: ${
+            err.response.data.detail ||
+            err.response.data.message ||
+            "Something went wrong"
+          }`
         );
+      } else if (err.request) {
+        console.error("Request error:", err.request);
+        setError("Network error. Please check your connection.");
+      } else {
+        console.error("Error:", err.message);
+        setError("Unexpected error occurred.");
+      }
     }
   };
 
-  // Toggle completion status of a reminder
-  const toggleComplete = (index) => {
-    setReminders(
-      reminders.map((reminder, i) =>
-        i === index ? { ...reminder, completed: !reminder.completed } : reminder
-      )
-    );
-  };
+  const handleDelete = async (id) => {
+    try {
+      // Send a DELETE request to remove the reminder from the backend
+      const response = await axios.delete(`${API_BASE_URL}${id}/`, {
+        headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+      });
 
-  // Delete a reminder via API
-  const deleteReminder = (index) => {
-    axios
-      .delete(`${API_URL}${index}/`)
-      .then(() => {
-        setReminders(reminders.filter((_, i) => i !== index));
-      })
-      .catch((error) =>
-        console.error("There was an error deleting the reminder!", error)
-      );
-  };
+      console.log("Reminder Deleted:", response.data);
 
-  // Handle Dropdown Change (to show custom input field)
-  const handleDropdownChange = (e) => {
-    const value = e.target.value;
-    if (value === "custom") {
-      setIsCustomReminder(true); // Show custom reminder input field
-    } else {
-      setIsCustomReminder(false); // Hide custom reminder input field
-      setNewReminder(value); // Set selected value as reminder
+      // Update the reminders state by filtering out the deleted reminder
+      setReminders(reminders.filter((reminder) => reminder.id !== id));
+    } catch (err) {
+      console.error("Error deleting reminder:", err);
+      setError("Failed to delete the reminder.");
     }
   };
 
   return (
-    <div className="container">
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Main Content */}
-      <div className="main-content">
-        <div className="reminder-card">
-          <h1>Reminder App</h1>
-          <div className="input-container">
-            <select value={newReminder} onChange={handleDropdownChange}>
-              <option value="">Select a reminder</option>
+    <div className="reminder-container">
+      <Sidebar /> {/* Include Sidebar component */}
+      <div className="reminder-form">
+        <h2>Create Reminder</h2>
+        {error && <p className="error-message">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Title:</label>
+            <select
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            >
+              <option value="">Select a title</option>
               <option value="SIN Number">SIN Number</option>
               <option value="Passport">Passport</option>
               <option value="Study Permit">Study Permit</option>
               <option value="Work Permit">Work Permit</option>
-              <option value="Driver License">Driver License</option>
-              <option value="custom">Custom Reminder</option>
+              <option value="Drivers License">Drivers License</option>
+              <option value="custom">Custom</option>
             </select>
+          </div>
 
-            {/* Show custom reminder input when "Custom Reminder" is selected */}
-            {isCustomReminder && (
+          {title === "custom" && (
+            <div className="form-group">
+              <label>Custom Title:</label>
               <input
                 type="text"
-                placeholder="Enter custom reminder"
-                value={customReminder}
-                onChange={(e) => setCustomReminder(e.target.value)}
+                value={customTitle}
+                onChange={(e) => setCustomTitle(e.target.value)}
+                required
               />
-            )}
+            </div>
+          )}
 
+          <div className="form-group">
+            <label>Document Expiry Date:</label>
             <input
               type="date"
-              value={expiryDate}
-              onChange={(e) => setExpiryDate(e.target.value)}
+              value={documentExpiryDate}
+              onChange={(e) => setDocumentExpiryDate(e.target.value)}
+              required
             />
+          </div>
+
+          <div className="form-group">
+            <label>Frequency:</label>
             <select
               value={frequency}
               onChange={(e) => setFrequency(e.target.value)}
             >
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
-              <option value="biweekly">Biweekly</option>
               <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
             </select>
-            <button onClick={addReminder}>
-              <FaPlus />
-            </button>
           </div>
 
-          <ul className="reminder-list">
-            {reminders.map((reminder, index) => (
-              <li
-                key={index}
-                className={`reminder-item ${
-                  reminder.completed ? "completed" : "pending"
-                }`}
+          <div className="form-group">
+            <label>Active:</label>
+            <input
+              type="checkbox"
+              checked={isActive}
+              onChange={(e) => setIsActive(e.target.checked)}
+            />
+          </div>
+
+          <button type="submit">Create Reminder</button>
+        </form>
+
+        <h3>Your Reminders</h3>
+        <ul>
+          {reminders.map((reminder) => (
+            <li key={reminder.id}>
+              {reminder.title} - {reminder.document_expiry_date} -{" "}
+              {reminder.frequency} -{" "}
+              {reminder.is_active ? "Active" : "Inactive"}
+              <button
+                onClick={() => handleDelete(reminder.id)}
+                style={{
+                  backgroundColor: "#e74c3c",
+                  color: "white",
+                  border: "none",
+                  padding: "5px 10px",
+                  marginLeft: "10px",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
               >
-                <span>
-                  {reminder.text} - {reminder.expiry} ({reminder.frequency})
-                </span>
-                <div className="action-buttons">
-                  <button onClick={() => toggleComplete(index)}>
-                    <FaCheck />
-                  </button>
-                  <button
-                    onClick={() => deleteReminder(index)}
-                    className="delete-button"
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
-}
+};
+
+export default ReminderForm;

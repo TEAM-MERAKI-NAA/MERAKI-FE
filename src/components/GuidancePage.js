@@ -85,4 +85,5 @@ const Guidance = () => {
       </div>
     </div>
   );
-
+};
+export default Guidance;
