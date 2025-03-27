@@ -69,7 +69,7 @@ function Navbar() {
       <div id="navbar-logo">Immigration Hub</div>
       <ul id="navbar-links">
         <li>
-          <a href="/Homepage">Home</a>
+          <a href="/Homepae">Home</a>
         </li>
         <li>
           <a href="/AboutUs">About</a>
