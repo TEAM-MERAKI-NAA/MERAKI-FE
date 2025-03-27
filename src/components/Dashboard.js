@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/Dashboard.css";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
-import { Line } from "react-chartjs-2"; 
+import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
-    const navigate = useNavigate(); // Initialize navigate function
+    const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [reminders, setReminders] = useState(["Complete Assignment", "Pay Rent", "Attend Workshop"]);
     const [newReminder, setNewReminder] = useState("");
+    const [userName, setUserName] = useState("User");
 
     useEffect(() => {
         const verifyAccessToken = async () => {
@@ -25,7 +26,9 @@ const Dashboard = () => {
                             "http://4.206.179.192:8000/auth/api/token/refresh/",
                             { refresh: refreshToken }
                         );
-                        localStorage.setItem("accessToken", response.data.access);
+                        const newAccessToken = response.data.access;
+                        localStorage.setItem("accessToken", newAccessToken);
+                        fetchUserProfile(newAccessToken);
                     } catch (error) {
                         console.error("Refresh Token Expired:", error);
                         logout();
@@ -33,31 +36,54 @@ const Dashboard = () => {
                 } else {
                     logout();
                 }
+            } else {
+                fetchUserProfile(accessToken);
             }
         };
 
+        const fetchUserProfile = async (token) => {
+            try {
+                const response = await axios.get("http://4.206.179.192:8000/profile/api/profile/", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+        
+                console.log("User Profile Response:", response.data); // ✅ Log response
+        
+                const firstName =
+                    response.data.first_name ||
+                    response.data.firstname ||
+                    response.data.name ||
+                    response.data.username || // fallback
+                    "User";
+        
+                setUserName(firstName);
+            } catch (error) {
+                console.error("Error fetching user profile:", error);
+                setUserName("User");
+            }
+        };
+        
+
         verifyAccessToken();
 
-        // Prevent navigating back to Dashboard after logout
         window.history.pushState(null, null, window.location.href);
         window.onpopstate = function () {
             window.history.pushState(null, null, window.location.href);
         };
     }, [navigate]);
 
-    // Logout Function
     const logout = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         navigate("/login");
     };
 
-    // Toggle Dropdown
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
-    // Close dropdown when clicking outside
     const handleOutsideClick = (event) => {
         if (!event.target.closest(".account-dropdown")) {
             setDropdownOpen(false);
@@ -70,7 +96,6 @@ const Dashboard = () => {
         return () => document.removeEventListener("click", handleOutsideClick);
     }, [dropdownOpen]);
 
-    // Function to Add Reminder
     const addReminder = () => {
         if (newReminder.trim() !== "") {
             setReminders([...reminders, newReminder]);
@@ -78,12 +103,10 @@ const Dashboard = () => {
         }
     };
 
-    // Function to Handle Chart Click (Redirect to Budget Tracker)
     const handleChartClick = () => {
-        navigate("/BudgetTracker"); // Redirect to Budget Tracker Page
+        navigate("/BudgetTracker");
     };
 
-    // Data for Line Chart (Budget Overview)
     const budgetData = {
         labels: ["Jan", "Feb", "Mar", "Apr", "May"],
         datasets: [
@@ -93,20 +116,18 @@ const Dashboard = () => {
                 fill: false,
                 backgroundColor: "#009d1d",
                 borderColor: "#007a14",
-                tension: 0.3
-            }
-        ]
+                tension: 0.3,
+            },
+        ],
     };
 
     return (
         <div className="dashboard-container">
             <Sidebar />
 
-            {/* Main Content */}
             <main className="dashboard-content">
-                {/* Top Bar */}
                 <div className="top-bar">
-                    <h1 className="welcome-text">Welcome Back!</h1>
+                    <h1 className="welcome-text">Welcome Back, {userName}!</h1>
                     <div className="account-dropdown">
                         <button className="account-button" onClick={toggleDropdown}>
                             <FaUser className="icon" />
@@ -125,15 +146,12 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Dashboard Widgets */}
                 <div className="dashboard-widgets">
-                    {/* Budget Overview Section (Line Chart) - Clickable */}
                     <div className="widget budget-tracker" onClick={handleChartClick} style={{ cursor: "pointer" }}>
                         <h3>Budget Overview</h3>
                         <Line data={budgetData} />
                     </div>
 
-                    {/* Reminders Section */}
                     <div className="widget task-reminder">
                         <h3>Reminders</h3>
                         <ul>
@@ -150,7 +168,6 @@ const Dashboard = () => {
                         <button className="green-btn" onClick={addReminder}>Add Reminder</button>
                     </div>
 
-                    {/* Currency Exchange Section */}
                     <div className="widget currency-exchange">
                         <h3>Currency Exchange</h3>
                         <p>1 USD = 1.35 CAD</p>
