@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Homepage.css";
+import { Link } from "react-router-dom";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -22,28 +24,28 @@ const features = [
     description:
       "Explore new ways to learn, track budgets, and connect with a community.",
     icon: <FaBookOpen className="icon blue" />,
-    link: "/Reminder", // Updated link for Reminder
+    link: "/Signup", // Updated link for Reminder
   },
   {
     title: "Budget Tracking",
     description:
       "Explore new ways to learn, track budgets, and connect with a community.",
     icon: <FaChalkboardTeacher className="icon yellow" />,
-    link: "/Finance", // Updated link for Budget Tracking
+    link: "/Signup", // Updated link for Budget Tracking
   },
   {
     title: "New News",
     description:
       "Explore new ways to learn, track budgets, and connect with a community.",
     icon: <FaNewspaper className="icon light-blue" />,
-    link: "/News", // Updated link for New News
+    link: "/Signup", // Updated link for New News
   },
   {
     title: "Community",
     description:
       "Explore new ways to learn, track budgets, and connect with a community.",
     icon: <FaUsers className="icon red" />,
-    link: "/Community", // Updated link for Community
+    link: "/Signup", // Updated link for Community
   },
 ];
 
@@ -69,16 +71,17 @@ function Navbar() {
       <div id="navbar-logo">Immigration Hub</div>
       <ul id="navbar-links">
         <li>
-          <a href="/Homepae">Home</a>
+          <a href="/Homepage">Home</a>
         </li>
         <li>
           <a href="/AboutUs">About</a>
         </li>
         <li>
-          <a href="/Homepage">Features</a>
+          <a href="/Signup">Sign up</a>
         </li>
+
         <li>
-          <a href="/Homepage">Contact</a>
+          <a href="/Login">Log in</a>
         </li>
       </ul>
     </nav>
@@ -134,7 +137,7 @@ function NewsSection() {
         "The government has introduced new policies to streamline applications.",
       image:
         "https://cdn.pixabay.com/photo/2022/04/18/02/24/architecture-7139263_1280.jpg",
-      link: "/News",
+      link: "/Signup",
     },
     {
       id: 2,
@@ -143,7 +146,7 @@ function NewsSection() {
         "Processing times for work visas have been significantly reduced.",
       image:
         "https://www.tripsavvy.com/thmb/yD2KRuls7CiXYcIkXGKCD87jS9o=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rue-saint-louis-in-the-upper-town-area-of-historic-old-quebec-quebec-city-quebec-canada-554993579-574d08b83df78ccee110df3b.jpg",
-      link: "/News",
+      link: "/Signup",
     },
     {
       id: 3,
@@ -152,7 +155,7 @@ function NewsSection() {
         "Canada aims to welcome more skilled professionals under Express Entry.",
       image:
         "https://www.state.gov/wp-content/uploads/2023/07/shutterstock_1171990615v2.jpg",
-      link: "/News",
+      link: "/Signup",
     },
     {
       id: 4,
@@ -161,7 +164,7 @@ function NewsSection() {
         "New rules make it simpler for foreign workers to renew their permits.",
       image:
         "https://www.carbonbrief.org/wp-content/uploads/2019/10/canada-hero-01.jpg",
-      link: "/News",
+      link: "/Signup",
     },
     {
       id: 5,

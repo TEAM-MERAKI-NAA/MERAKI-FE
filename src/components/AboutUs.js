@@ -35,10 +35,11 @@ function Navbar() {
           <a href="/AboutUs">About</a>
         </li>
         <li>
-          <a href="/Homepage">Features</a>
+          <a href="/Signup">Sign up</a>
         </li>
+
         <li>
-          <a href="/Homepage">Contact</a>
+          <a href="/Login">Log in</a>
         </li>
       </ul>
     </nav>

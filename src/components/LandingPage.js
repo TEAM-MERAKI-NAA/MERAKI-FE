@@ -43,16 +43,6 @@ const LandingPage = () => {
       <nav id="landing-navbar">
         <div id="navbar-logo"></div>
         <div id="navbar-buttons">
-          <select
-            id="currency-selector"
-            value={selectedCurrency}
-            onChange={handleCurrencyChange}
-          >
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="CAD">CAD</option>
-            <option value="GBP">GBP</option>
-          </select>
           <Link to="/signup">
             <button id="signup-button">Sign up</button>
           </Link>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie"; // Importing js-cookie
+import Cookies from "js-cookie";
 import Sidebar from "./Sidebar";
 import "../styles/Reminder.css";
 
@@ -19,14 +19,14 @@ const ReminderForm = () => {
   useEffect(() => {
     const fetchReminders = async () => {
       try {
-        const token = Cookies.get("authToken"); // Get token from cookie
+        const token = Cookies.get("authToken");
         if (!token) {
           setError("User not authenticated");
           return;
         }
 
         const response = await axios.get(API_BASE_URL, {
-          headers: { Authorization: `Bearer ${token}` }, // Use the token from cookie
+          headers: { Authorization: `Bearer ${token}` },
         });
         setReminders(response.data);
       } catch (err) {
@@ -49,14 +49,14 @@ const ReminderForm = () => {
     };
 
     try {
-      const token = Cookies.get("authToken"); // Get token from cookie
+      const token = Cookies.get("authToken");
       if (!token) {
         setError("User not authenticated");
         return;
       }
 
       const response = await axios.post(API_BASE_URL, newReminder, {
-        headers: { Authorization: `Bearer ${token}` }, // Use the token from cookie
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       console.log("Reminder Created:", response.data);
@@ -65,11 +65,10 @@ const ReminderForm = () => {
         `${API_BASE_URL}${response.data.id}/send_immediate_reminder/`,
         newReminder,
         {
-          headers: { Authorization: `Bearer ${token}` }, // Use the token from cookie
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      // Update the reminders list with the newly added reminder
       setReminders([...reminders, response.data]);
 
       setTitle("");
@@ -94,6 +93,26 @@ const ReminderForm = () => {
         console.error("Error:", err.message);
         setError("Unexpected error occurred.");
       }
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const token = Cookies.get("authToken");
+      if (!token) {
+        setError("User not authenticated");
+        return;
+      }
+
+      await axios.delete(`${API_BASE_URL}${id}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Remove the deleted reminder from the state
+      setReminders(reminders.filter((reminder) => reminder.id !== id));
+    } catch (err) {
+      console.error("Error deleting reminder:", err);
+      setError("Failed to delete reminder.");
     }
   };
 
@@ -175,6 +194,20 @@ const ReminderForm = () => {
               {reminder.title} - {reminder.document_expiry_date} -{" "}
               {reminder.frequency} -{" "}
               {reminder.is_active ? "Active" : "Inactive"}
+              <button
+                onClick={() => handleDelete(reminder.id)}
+                style={{
+                  backgroundColor: "#e74c3c",
+                  color: "white",
+                  border: "none",
+                  padding: "5px 10px",
+                  marginLeft: "10px",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>
