@@ -17,6 +17,7 @@ import Profile from "./components/Profile";
 import Settings from "./components/Settings";
 import GuidancePage from "./components/GuidancePage";
 import PrivateRoute from "./components/PrivateRoute"; // Import PrivateRoute
+import Deals from "./components/Deals";
 
 // Import styles
 import "./styles/LandingPage.css";
@@ -38,6 +39,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/guidance" element={<GuidancePage />} />
+          <Route path="/deals" element={<Deals />} />
 
           {/* Protected Routes (Require Authentication) */}
           <Route element={<PrivateRoute />}>

@@ -58,16 +58,13 @@ function Navbar() {
       <div id="navbar-logo">Immigration Hub</div>
       <ul id="navbar-links">
         <li>
-          <a href="/Homepage">Home</a>
+          <a href="/dashboard">Dashboard</a>
         </li>
         <li>
-          <a href="/Homepage">About</a>
+          <a href="/aboutus">About Us</a>
         </li>
         <li>
-          <a href="/Homepage">Features</a>
-        </li>
-        <li>
-          <a href="/Homepage">Contact</a>
+          <a href="/profile">My Profile</a>
         </li>
       </ul>
     </nav>
