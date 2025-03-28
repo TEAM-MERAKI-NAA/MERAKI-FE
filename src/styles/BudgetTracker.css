@@ -92,3 +92,13 @@ input[type="number"] {
 .heading{
     color: #388e3c;
 }
+
+.budget-inputs input,
+.budget-inputs select {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: white; /* ✅ Add this line */
+    color: #000; /* Optional: ensure text is black for better visibility */
+}

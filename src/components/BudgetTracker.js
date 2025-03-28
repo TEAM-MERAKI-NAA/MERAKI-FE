@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Sidebar from "./Sidebar";
 import "../styles/BudgetTracker.css";
 
@@ -13,14 +14,41 @@ const BudgetTracker = () => {
         date: "",
     });
 
-    const handleAddExpense = () => {
+    const handleAddExpense = async () => {
         if (!expenseData.amount || !expenseData.category || !expenseData.date) {
             alert("Please fill in all expense details.");
             return;
         }
 
-        setExpenses([...expenses, { ...expenseData, amount: parseFloat(expenseData.amount) }]);
-        setExpenseData({ amount: "", category: "", date: "" });
+        const expenseToAdd = {
+            amount: parseFloat(expenseData.amount),
+            category: expenseData.category,
+            date: expenseData.date,
+            income: monthlyIncome,
+        };
+
+        try {
+            const token = localStorage.getItem("accessToken");
+
+            const response = await axios.post(
+                "http://localhost:8000/api/budget/",
+                expenseToAdd,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            console.log("Saved to database:", response.data);
+
+            setExpenses([...expenses, expenseToAdd]);
+            setExpenseData({ amount: "", category: "", date: "" });
+        } catch (error) {
+            console.error("Error saving expense:", error);
+            alert("Failed to save expense. Please try again.");
+        }
     };
 
     const totalExpenses = expenses.reduce((acc, exp) => acc + exp.amount, 0);
@@ -37,7 +65,6 @@ const BudgetTracker = () => {
                     <input
                         type="number"
                         placeholder="Enter Monthly Income ($)"
-                        // value={monthlyIncome}
                         onChange={(e) => {
                             const value = parseFloat(e.target.value);
                             if (value >= 0 || e.target.value === "") {
@@ -75,6 +102,7 @@ const BudgetTracker = () => {
                     <input
                         type="date"
                         value={expenseData.date}
+                        max={new Date().toISOString().split("T")[0]} // ✅ Restrict to today or earlier
                         onChange={(e) => setExpenseData({ ...expenseData, date: e.target.value })}
                     />
 
