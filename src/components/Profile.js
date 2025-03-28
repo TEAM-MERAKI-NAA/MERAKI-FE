@@ -222,7 +222,8 @@ const Profile = () => {
         if (!accessToken && refreshToken) {
             try {
                 const response = await axios.post(
-                    "http://4.206.179.192:8000/auth/api/token/refresh/",
+                    // "http://4.206.179.192:8000/auth/api/token/refresh/",
+                    "http://4.206.179.192:8000/profile/api/profile/",
                     { refresh: refreshToken }
                 );
                 accessToken = response.data.access;
@@ -313,10 +314,6 @@ const Profile = () => {
                             <input type="text" name="address" value={formData.address} onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            <label>Gender</label>
-                            <input type="text" name="gender" value={formData.gender} onChange={handleChange} />
-                        </div>
-                        <div className="form-group">
                             <label>City</label>
                             <input type="text" name="city" value={formData.city} onChange={handleChange} />
                         </div>
@@ -327,6 +324,41 @@ const Profile = () => {
                         <div className="form-group">
                             <label>Province</label>
                             <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Gender</label>
+                            <div className="checkbox-group">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="gender"
+                                        value="M"
+                                        checked={formData.gender === "M"}
+                                        onChange={handleChange}
+                                    />
+                                    <span>Male</span>
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="gender"
+                                        value="F"
+                                        checked={formData.gender === "F"}
+                                        onChange={handleChange}
+                                    />
+                                    <span>Female</span>
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="gender"
+                                        value="O"
+                                        checked={formData.gender === "O"}
+                                        onChange={handleChange}
+                                    />
+                                    <span>Other</span>
+                                </label>
+                            </div>
                         </div>
                         <div className="form-group full-width">
                             <label>About Me</label>
