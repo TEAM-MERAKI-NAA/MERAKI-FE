@@ -176,11 +176,11 @@ const Profile = () => {
         email: "",
         firstName: "",
         lastName: "",
-        address: "",
+        contact: "",
         city: "",
-        country: "",
-        postalCode: "",
-        aboutMe: "",
+        nationality: "",
+        province: "",
+        aboutme: "",
         gender: "",
     });
 
@@ -200,11 +200,11 @@ const Profile = () => {
                 email: response.data.email || "",
                 firstName: response.data.first_name || "",
                 lastName: response.data.last_name || "",
-                address: response.data.address || "",
+                contact: response.data.contact || "",
                 city: response.data.city || "",
-                country: response.data.country || "",
-                postalCode: response.data.postal_code || "",
-                aboutMe: response.data.about_me || "",
+                nationality: response.data.nationality || "",
+                province: response.data.province || "",
+                aboutme: response.data.about_me || "",
                 gender: response.data.gender || "",
             });
         } catch (error) {
@@ -222,8 +222,7 @@ const Profile = () => {
         if (!accessToken && refreshToken) {
             try {
                 const response = await axios.post(
-                    // "http://4.206.179.192:8000/auth/api/token/refresh/",
-                    "http://4.206.179.192:8000/profile/api/profile/",
+                    "http://4.206.179.192:8000/auth/api/token/refresh/",
                     { refresh: refreshToken }
                 );
                 accessToken = response.data.access;
@@ -265,11 +264,11 @@ const Profile = () => {
             const response = await axios.put(
                 `http://4.206.179.192:8000/profile/api/profile/${formData.id}/`,
                 {
-                    address: formData.address,
+                    contact: formData.contact,
                     city: formData.city,
-                    country: formData.country,
-                    postal_code: formData.postalCode,
-                    about_me: formData.aboutMe,
+                    nationality: formData.nationality,
+                    province: formData.province,
+                    aboutme: formData.aboutme,
                     gender: formData.gender,
                 },
                 { headers: { Authorization: `Bearer ${accessToken}` } }
@@ -311,7 +310,7 @@ const Profile = () => {
                         </div>
                         <div className="form-group">
                             <label>Contact No. (optional)</label>
-                            <input type="text" name="address" value={formData.address} onChange={handleChange} />
+                            <input type="number" name="contact" value={formData.contact} onChange={handleChange} />
                         </div>
                         <div className="form-group">
                             <label>City</label>
@@ -319,11 +318,11 @@ const Profile = () => {
                         </div>
                         <div className="form-group">
                             <label>Nationality</label>
-                            <input type="text" name="country" value={formData.country} onChange={handleChange} />
+                            <input type="text" name="nationality" value={formData.nationality} onChange={handleChange} />
                         </div>
                         <div className="form-group">
                             <label>Province</label>
-                            <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} />
+                            <input type="text" name="province" value={formData.province} onChange={handleChange} />
                         </div>
                         <div className="form-group">
                             <label>Gender</label>
@@ -362,7 +361,7 @@ const Profile = () => {
                         </div>
                         <div className="form-group full-width">
                             <label>About Me</label>
-                            <textarea name="aboutMe" value={formData.aboutMe} onChange={handleChange}></textarea>
+                            <textarea name="aboutme" value={formData.aboutme} onChange={handleChange}></textarea>
                         </div>
                         <button type="submit" className="update-btn">UPDATE PROFILE</button>
                     </form>

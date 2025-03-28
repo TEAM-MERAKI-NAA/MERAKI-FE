@@ -19,51 +19,74 @@ const Dashboard = () => {
             const accessToken = localStorage.getItem("accessToken");
             const refreshToken = localStorage.getItem("refreshToken");
 
-            if (!accessToken) {
-                if (refreshToken) {
-                    try {
-                        const response = await axios.post(
-                            "http://4.206.179.192:8000/auth/api/token/refresh/",
-                            { refresh: refreshToken }
-                        );
-                        const newAccessToken = response.data.access;
-                        localStorage.setItem("accessToken", newAccessToken);
-                        fetchUserProfile(newAccessToken);
-                    } catch (error) {
-                        console.error("Refresh Token Expired:", error);
-                        logout();
-                    }
-                } else {
+            if (!accessToken && refreshToken) {
+                try {
+                    const response = await axios.post(
+                        "http://4.206.179.192:8000/auth/api/token/refresh/",
+                        { refresh: refreshToken }
+                    );
+                    const newAccessToken = response.data.access;
+                    localStorage.setItem("accessToken", newAccessToken);
+                    fetchUserProfile(newAccessToken, refreshToken);
+                } catch (error) {
+                    console.error("Refresh Token Expired:", error);
                     logout();
                 }
             } else {
-                fetchUserProfile(accessToken);
+                fetchUserProfile(accessToken, refreshToken);
             }
         };
 
-        const fetchUserProfile = async (token) => {
+        const fetchUserProfile = async (token, refreshToken) => {
             try {
                 const response = await axios.get("http://4.206.179.192:8000/profile/api/profile/", {
                     headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
-        
-        
+
                 const firstName =
                     response.data.first_name ||
                     response.data.firstname ||
                     response.data.name ||
-                    response.data.username || // fallback
+                    response.data.username ||
                     "User";
-        
+
                 setUserName(firstName);
             } catch (error) {
-                console.error("Error fetching user profile:", error);
-                setUserName("User");
+                if (error.response && error.response.status === 401 && refreshToken) {
+                    try {
+                        const refreshResponse = await axios.post(
+                            "http://4.206.179.192:8000/auth/api/token/refresh/",
+                            { refresh: refreshToken }
+                        );
+                        const newAccessToken = refreshResponse.data.access;
+                        localStorage.setItem("accessToken", newAccessToken);
+
+                        const retryResponse = await axios.get("http://4.206.179.192:8000/profile/api/profile/", {
+                            headers: {
+                                Authorization: `Bearer ${newAccessToken}`,
+                            },
+                        });
+
+                        const firstName =
+                            retryResponse.data.first_name ||
+                            retryResponse.data.firstname ||
+                            retryResponse.data.name ||
+                            retryResponse.data.username ||
+                            // "User";
+
+                        setUserName(firstName);
+                    } catch (refreshError) {
+                        console.error("Token refresh failed:", refreshError);
+                        logout();
+                    }
+                } else {
+                    console.error("Error fetching user profile:", error);
+                    setUserName("User");
+                }
             }
         };
-        
 
         verifyAccessToken();
 
