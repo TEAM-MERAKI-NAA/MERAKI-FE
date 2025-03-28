@@ -8,6 +8,8 @@
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f4f7fc;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
 }
 
 /* Reminder Form Container */
@@ -16,6 +18,8 @@ body {
   justify-content: center;
   padding: 40px;
   background-color: #f4f7fc;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
 }
 
 .reminder-form {
@@ -29,7 +33,7 @@ body {
 
 /* Title and Headers */
 .reminder-form h2 {
-  color: #2c3e50;
+  color: #406083;
   font-size: 28px;
   margin-bottom: 20px;
 }
@@ -47,7 +51,7 @@ body {
 
 .reminder-form label {
   font-size: 16px;
-  color: #34495e;
+  color: #406083;
   margin-bottom: 10px;
   display: block;
 }
@@ -68,7 +72,7 @@ body {
 .reminder-form select:focus,
 .reminder-form input[type="text"]:focus,
 .reminder-form input[type="date"]:focus {
-  border-color: #1abc9c;
+  border-color: #406083;
   outline: none;
 }
 
@@ -76,7 +80,7 @@ body {
 .reminder-form button {
   width: 100%;
   padding: 14px;
-  background-color: #008d38;
+  background-color: #406083;
   color: white;
   border: none;
   font-size: 18px;
@@ -87,7 +91,7 @@ body {
 }
 
 .reminder-form button:hover {
-  background-color: #006f28;
+  background-color: #406083;
 }
 
 /* Error Message */

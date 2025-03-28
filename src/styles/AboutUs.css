@@ -8,7 +8,7 @@
   justify-content: space-around;
   align-items: center;
   padding: 20px 50px;
-  background: rgb(72 139 109 / 47%);
+  background: #406083;
   color: white;
   z-index: 1000;
   transition: all 0.3s ease-in-out;
@@ -20,7 +20,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  background: rgb(71 122 97 / 82%);
+  background: #406083;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   padding: 15px 50px;
   font-family: 'Lusitana', Georgia, serif;
@@ -78,7 +78,7 @@
 
 .about-content h3 {
   font-size: 1.5rem;
-  color: #0a5801;
+  color: #406083;
 }
 
 .about-content p {
@@ -133,7 +133,7 @@
 
 .role {
   font-weight: bold;
-  color: #027d42;
+  color: #406083;
 }
 
 .team-member p {
@@ -146,7 +146,7 @@
 .values-section {
   text-align: center;
   padding: 50px 20px;
-  background: linear-gradient(135deg, #aeb4af, #004004);
+  background: linear-gradient(135deg, #aeb4af,#406083);
   color: rgb(255, 255, 255);
 }
 

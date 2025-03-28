@@ -50,7 +50,7 @@
   justify-content: space-around;
   align-items: center;
   padding: 20px 50px;
-  background: rgb(72 139 109 / 47%);
+  background:#406083;
   color: white;
   z-index: 1000;
   transition: all 0.3s ease-in-out;
@@ -63,7 +63,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  background: rgb(71 122 97 / 82%);
+  background:#406083;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   padding: 15px 50px;
   font-family: 'Lusitana', Georgia, serif;
@@ -138,7 +138,7 @@ h2 {
 
 .category-filters button {
   padding: 10px 20px;
-  background-color: #016212;
+  background-color: #406083;
   color: white;
   border: none;
   border-radius: 5px;
@@ -148,11 +148,11 @@ h2 {
 }
 
 .category-filters button:hover {
-  background-color: #016212;
+  background-color: #406083;
 }
 
 .category-filters button.active-category {
-  background-color: #016212;
+  background-color: #406083;
 }
 
 .news-list {

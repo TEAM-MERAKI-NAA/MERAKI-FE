@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-      font-family: 'Lusitana', Georgia, serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
   }
   
@@ -21,7 +21,7 @@
     background-size: cover;
     background-position: center;
     z-index: 0;
-      font-family: 'Lusitana', Georgia, serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
   }
   
@@ -37,7 +37,7 @@
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 10;
-      font-family: 'Lusitana', Georgia, serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
 }
  
@@ -45,19 +45,19 @@
     display: flex;
     align-items: center;
     gap: 20px;
-      font-family: 'Lusitana', Georgia, serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
   }
   
   #currency-button {
     font-size: 16px;
     color: #333;
-      font-family: 'Lusitana', Georgia, serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
   }
   
   #signup-button {
-    background-color: #388e3c;
+    background-color: #406083;
     color: white;
     padding: 8px 20px;
     border-radius: 20px;
@@ -80,7 +80,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-      font-family: 'Lusitana', Georgia, serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
 }
   
@@ -93,7 +93,7 @@
     font-weight: bold;
     color: black;
     margin-bottom: 20px;
-      font-family: 'Lusitana', Georgia, serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
   }
   
@@ -102,12 +102,12 @@
     font-size: 18px;
     margin-bottom: 30px;
     max-width: 600px;
-      font-family: 'Lusitana', Georgia, serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
   }
   
   #signup-btn {
-    background-color: #388e3c;
+    background-color: #406083;
     color: white;
     padding: 14px 30px;
     border-radius: 25px;
@@ -124,7 +124,7 @@
 }
 
 #signup-button:hover {
-    background-color: #2e7d32;
+    background-color: #406083;
 }
 
 #login-button:hover {
@@ -132,6 +132,6 @@
 }
 
 #signup-btn:hover {
-    background-color: #2e7d32;
+    background-color: #406083;
 }
 
