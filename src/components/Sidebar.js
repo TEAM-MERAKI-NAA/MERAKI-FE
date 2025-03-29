@@ -46,7 +46,9 @@ const Sidebar = () => {
               <FaChartBar className="icon" /> {!isShrunk && "Overview"}
             </Link>
           </li>
-          <li className={location.pathname === "/dashboard" ? "active" : ""}>
+          <li
+            className={location.pathname === "/budgettracker" ? "active" : ""}
+          >
             <Link to="/budgettracker">
               <FaMoneyBillWaveAlt className="icon" />{" "}
               {!isShrunk && "Budget Tracker"}
