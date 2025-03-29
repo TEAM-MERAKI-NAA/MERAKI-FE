@@ -140,3 +140,33 @@ input:checked + .slider:before {
     background: #e60000;
     transform: scale(1.05);
 }
+
+/* Language & Region Section */
+.language-region-group {
+    margin-top: 15px;
+}
+
+.language-region-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.language-region-group select {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+    transition: 0.3s ease;
+}
+
+.language-region-group select:focus {
+    outline: none;
+    border-color: #388e3c;
+    box-shadow: 0 0 5px rgba(56, 142, 60, 0.3);
+}
+

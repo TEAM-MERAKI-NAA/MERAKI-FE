@@ -16,6 +16,7 @@ import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
 import GuidancePage from "./components/GuidancePage";
+import BudgetTracker from "./components/BudgetTracker";
 import PrivateRoute from "./components/PrivateRoute"; // Import PrivateRoute
 import Deals from "./components/Deals";
 
@@ -46,6 +47,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/budgettracker" element={<BudgetTracker/>} />
           </Route>
 
           {/* Default Route - Redirect to Homepage if route not found */}

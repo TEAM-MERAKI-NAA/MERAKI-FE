@@ -1,0 +1,104 @@
+.budget-tracker-container {
+    display: flex;
+    height: 100vh;
+    background: #f5f5f5;
+  }
+  
+  .budget-content {
+    flex: 1;
+    padding: 40px;
+    text-align: center;
+    margin-left: 250px; /* adjust if sidebar width changes */
+  }
+  
+  .budget-heading {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  
+  .budget-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto 30px auto;
+  }
+  
+  .budget-inputs input,
+  .budget-inputs select {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  .styled-dropdown {
+    width: 100%;
+  }
+  
+  .add-btn {
+    padding: 12px;
+    font-size: 16px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .add-btn:hover {
+    background-color: darkgreen;
+  }
+  
+  .budget-summary,
+  .expense-list {
+    background: white;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .budget-summary h2,
+  .expense-list h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  .expense-list ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+  }
+  
+  .expense-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Hide number input arrows for all browsers */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+.heading{
+    color: #388e3c;
+}
+
+.budget-inputs input,
+.budget-inputs select {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: white; /* ✅ Add this line */
+    color: #000; /* Optional: ensure text is black for better visibility */
+}
