@@ -63,7 +63,7 @@ h1 {
 
 .deal-card button {
   padding: 8px 15px;
-  background-color: #007BFF;
+  background-color: #406083;
   color: white;
   border: none;
   border-radius: 5px;
@@ -72,5 +72,5 @@ h1 {
 }
 
 .deal-card button:hover {
-  background-color: #0056b3;
+  background-color: #406083;
 }

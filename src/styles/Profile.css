@@ -98,7 +98,7 @@ textarea {
 }
 
 .update-btn {
-    background: #388e3c;
+    background: #406083;
     color: white;
     padding: 12px;
     border: none;
@@ -114,7 +114,7 @@ textarea {
 }
 
 .update-btn:hover {
-    background: #388e3c;
+    background: #406083;
     transform: scale(1.05);
 }
 

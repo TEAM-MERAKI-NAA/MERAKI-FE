@@ -46,7 +46,7 @@ margin-top: 5pc}
 
 /* Active Page */
 .sidebar nav ul li.active a {
-    background: #1a3b62;
+    background: #4985aa;
     color: rgb(0, 0, 0);
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     border-bottom: 3px solid #1a3b62;
@@ -54,7 +54,7 @@ margin-top: 5pc}
 
 /* Hover */
 .sidebar nav ul li a:hover {
-    background: #457b9d;
+    background: #4985aa;
     color: rgb(0, 0, 0);
 }
 
