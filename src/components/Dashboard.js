@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/Dashboard.css";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
-import { Line } from "react-chartjs-2";
-import "chart.js/auto";
 import Sidebar from "./Sidebar";
+import ExpenseTable from "./ExpenseTable"; // Importing the reusable component
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -13,6 +12,8 @@ const Dashboard = () => {
     const [reminders, setReminders] = useState(["Complete Assignment", "Pay Rent", "Attend Workshop"]);
     const [newReminder, setNewReminder] = useState("");
     const [userName, setUserName] = useState("User");
+    const [expenses, setExpenses] = useState([]);
+    const [monthlyIncome, setMonthlyIncome] = useState(0);
 
     useEffect(() => {
         const verifyAccessToken = async () => {
@@ -74,7 +75,7 @@ const Dashboard = () => {
                             retryResponse.data.firstname ||
                             retryResponse.data.name ||
                             retryResponse.data.username ||
-                            // "User";
+                            "User";
 
                         setUserName(firstName);
                     } catch (refreshError) {
@@ -88,7 +89,31 @@ const Dashboard = () => {
             }
         };
 
+        const fetchExpenses = async () => {
+            try {
+                const token = localStorage.getItem("accessToken");
+                const response = await axios.get("http://4.206.179.192:8000/budget/api/budget/", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                const filteredExpenses = response.data.filter(
+                    (exp) => exp.amount && exp.amount > 0 && exp.description !== "Monthly income"
+                );
+
+                setExpenses(filteredExpenses);
+
+                if (response.data.length > 0 && response.data[0].monthly_income) {
+                    setMonthlyIncome(parseFloat(response.data[0].monthly_income));
+                }
+            } catch (err) {
+                console.error("Failed to load budget data", err);
+            }
+        };
+
         verifyAccessToken();
+        fetchExpenses();
 
         window.history.pushState(null, null, window.location.href);
         window.onpopstate = function () {
@@ -125,24 +150,6 @@ const Dashboard = () => {
         }
     };
 
-    const handleChartClick = () => {
-        navigate("/BudgetTracker");
-    };
-
-    const budgetData = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-        datasets: [
-            {
-                label: "Total Expenses ($)",
-                data: [500, 700, 650, 800, 750],
-                fill: false,
-                backgroundColor: "#009d1d",
-                borderColor: "#007a14",
-                tension: 0.3,
-            },
-        ],
-    };
-
     return (
         <div className="dashboard-container">
             <Sidebar />
@@ -169,9 +176,9 @@ const Dashboard = () => {
                 </div>
 
                 <div className="dashboard-widgets">
-                    <div className="widget budget-tracker" onClick={handleChartClick} style={{ cursor: "pointer" }}>
+                    <div className="widget budget-tracker">
                         <h3>Budget Overview</h3>
-                        <Line data={budgetData} />
+                        <ExpenseTable expenses={expenses} monthlyIncome={monthlyIncome} />
                     </div>
 
                     <div className="widget task-reminder">
