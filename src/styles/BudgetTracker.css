@@ -144,3 +144,12 @@ input[type="number"] {
     background-color: #f1f1f1;
     transition: background-color 0.2s ease;
   }
+
+  /* Removes white background and shadow when used */
+.expense-list.no-card {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    margin-top: 0;
+  }
+  

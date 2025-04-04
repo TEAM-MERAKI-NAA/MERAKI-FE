@@ -1,9 +1,8 @@
-// src/components/ExpenseTable.js
 import React from "react";
 
-const ExpenseTable = ({ expenses, monthlyIncome }) => {
+const ExpenseTable = ({ expenses, monthlyIncome, showHeading = true, customClass = "" }) => {
     return (
-        <div className="expense-list">
+        <div className={`expense-list ${customClass} || ""`}>
             <h2 className="heading">Expenses</h2>
             {expenses.length === 0 ? (
                 <p className="no-expense-msg">You have not added any expenses until now.</p>
@@ -23,6 +22,7 @@ const ExpenseTable = ({ expenses, monthlyIncome }) => {
                             const runningTotal = expenses
                                 .slice(0, index + 1)
                                 .reduce((acc, e) => acc + parseFloat(e.amount), 0);
+
                             const remainingBalance = monthlyIncome - runningTotal;
 
                             rows.push(

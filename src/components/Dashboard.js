@@ -176,9 +176,9 @@ const Dashboard = () => {
                 </div>
 
                 <div className="dashboard-widgets">
-                    <div className="widget budget-tracker">
+                    <div className="widget budget-tracker no-bg-shadow">
                         <h3>Budget Overview</h3>
-                        <ExpenseTable expenses={expenses} monthlyIncome={monthlyIncome} />
+                        <ExpenseTable expenses={expenses} monthlyIncome={monthlyIncome} customClass="dashboard-expense-list" showHeading={false} />
                     </div>
 
                     <div className="widget task-reminder">

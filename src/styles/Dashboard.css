@@ -293,3 +293,10 @@ h1{
 .budget-tracker canvas {
     max-height: 250px;
 }
+
+.dashboard-expense-list {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin-top: 0;
+}

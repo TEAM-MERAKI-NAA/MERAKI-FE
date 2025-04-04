@@ -3,6 +3,7 @@ import Select from "react-select";
 import axios from "axios";
 import Sidebar from "./Sidebar";
 import "../styles/BudgetTracker.css";
+import ExpenseTable from "./ExpenseTable";
 
 const categoryOptions = [
     { label: "Rent", value: "housing" },
@@ -174,44 +175,11 @@ const BudgetTracker = () => {
                 </div>
 
                 {/* Expense Table */}
-                <div className="expense-list">
-                    <h2 className="heading">Expenses</h2>
-                    {expenses.length === 0 ? (
-                        <p>No expenses added yet.</p>
-                    ) : (
-                        <table className="expense-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Expense ($)</th>
-                                    <th>Category</th>
-                                    <th>Description</th>
-                                    <th>Remaining Balance ($)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {expenses.reduce((rows, exp, index) => {
-                                    const runningTotal = expenses
-                                        .slice(0, index + 1)
-                                        .reduce((acc, e) => acc + parseFloat(e.amount), 0);
-
-                                    const remainingBalance = monthlyIncome - runningTotal;
-
-                                    rows.push(
-                                        <tr key={index}>
-                                            <td>{exp.date}</td>
-                                            <td>{parseFloat(exp.amount).toFixed(2)}</td>
-                                            <td>{exp.category}</td>
-                                            <td>{exp.description}</td>
-                                            <td>{remainingBalance.toFixed(2)}</td>
-                                        </tr>
-                                    );
-                                    return rows;
-                                }, [])}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
+                    <ExpenseTable
+                        expenses={expenses}
+                        monthlyIncome={monthlyIncome}
+                        showHeading={true} 
+                    />
             </main>
         </div>
     );
