@@ -194,7 +194,6 @@ const Dashboard = () => {
                         <h3>Budget Overview</h3>
                         <div
                             className="table-clickable"
-                            onClick={() => navigate("/BudgetTracker")}
                         >
                             <ExpenseTable
                                 expenses={expenses.slice(0, 4)}

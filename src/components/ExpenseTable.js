@@ -1,9 +1,10 @@
 import React from "react";
+import { FaTrash } from "react-icons/fa";
 
-const ExpenseTable = ({ expenses, monthlyIncome, showHeading = true, customClass = "" }) => {
+const ExpenseTable = ({ expenses, monthlyIncome, showHeading = true, customClass = "", onDelete }) => {
     return (
-        <div className={`expense-list ${customClass} || ""`}>
-            <h2 className="heading">Expenses</h2>
+        <div className={`expense-list ${customClass}`}>
+            {showHeading && <h2 className="heading">Expenses</h2>}
             {expenses.length === 0 ? (
                 <p className="no-expense-msg">You have not added any expenses until now.</p>
             ) : (
@@ -15,6 +16,7 @@ const ExpenseTable = ({ expenses, monthlyIncome, showHeading = true, customClass
                             <th>Category</th>
                             <th>Description</th>
                             <th>Remaining Balance ($)</th>
+                            {onDelete && <th>Delete</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -26,12 +28,25 @@ const ExpenseTable = ({ expenses, monthlyIncome, showHeading = true, customClass
                             const remainingBalance = monthlyIncome - runningTotal;
 
                             rows.push(
-                                <tr key={index}>
+                                <tr key={exp.id || index}>
                                     <td>{exp.date}</td>
                                     <td>{parseFloat(exp.amount).toFixed(2)}</td>
                                     <td>{exp.category}</td>
                                     <td>{exp.description}</td>
                                     <td>{remainingBalance.toFixed(2)}</td>
+                                    {onDelete && (
+                                        <td>
+                                            <button
+                                                className="delete-btn"
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // prevent parent click event
+                                                    onDelete(exp.id);
+                                                }}
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        </td>
+                                    )}
                                 </tr>
                             );
                             return rows;

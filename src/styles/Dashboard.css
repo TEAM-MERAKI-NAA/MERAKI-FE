@@ -294,15 +294,6 @@ h1{
     margin-top: 0;
 }
 
-.table-clickable {
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.table-clickable:hover {
-    transform: scale(1.01);
-}
-
 .track-budget-btn {
     margin-top: 15px;
     padding: 10px 20px;
@@ -317,13 +308,4 @@ h1{
 
 .track-budget-btn:hover {
     background-color: darkgreen;
-}
-
-.table-clickable {
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.table-clickable:hover {
-    transform: scale(1.01);
 }

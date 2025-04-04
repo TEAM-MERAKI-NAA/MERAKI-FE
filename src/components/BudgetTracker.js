@@ -89,6 +89,21 @@ const BudgetTracker = () => {
         }
     };
 
+    const handleDelete = async (id) => {
+        try {
+            const token = localStorage.getItem("accessToken");
+            await axios.delete(`http://4.206.179.192:8000/budget/api/budget/${id}/`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            setExpenses((prev) => prev.filter((exp) => exp.id !== id));
+        } catch (error) {
+            console.error("Error deleting expense:", error);
+            alert("Failed to delete expense. Please try again.");
+        }
+    };
+
+
     const totalExpenses = expenses.reduce((acc, exp) => acc + Number(exp.amount || 0), 0);
     const remaining = monthlyIncome - totalExpenses;
 
@@ -175,11 +190,13 @@ const BudgetTracker = () => {
                 </div>
 
                 {/* Expense Table */}
-                    <ExpenseTable
-                        expenses={expenses}
-                        monthlyIncome={monthlyIncome}
-                        showHeading={true} 
-                    />
+                <ExpenseTable
+                    expenses={expenses}
+                    monthlyIncome={monthlyIncome}
+                    showHeading={true}
+                    onDelete={handleDelete}
+                />
+
             </main>
         </div>
     );
