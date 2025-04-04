@@ -108,13 +108,13 @@
 }
 
 .widget button {
-    background: #009d1d;
+    background: #388e3c;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
+    width: 84%;
     transition: 0.3s;
 }
 
@@ -299,6 +299,31 @@ h1{
     box-shadow: none !important;
     padding: 0 !important;
     margin-top: 0;
+}
+
+.table-clickable {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.table-clickable:hover {
+    transform: scale(1.01);
+}
+
+.track-budget-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.track-budget-btn:hover {
+    background-color: darkgreen;
 }
 
 .table-clickable {
