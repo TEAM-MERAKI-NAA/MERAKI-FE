@@ -176,10 +176,19 @@ const Dashboard = () => {
                 </div>
 
                 <div className="dashboard-widgets">
-                    <div className="widget budget-tracker no-bg-shadow">
+                    <div
+                        className="widget budget-tracker no-bg-shadow table-clickable"
+                        onClick={() => navigate("/BudgetTracker")}
+                    >
                         <h3>Budget Overview</h3>
-                        <ExpenseTable expenses={expenses} monthlyIncome={monthlyIncome} customClass="dashboard-expense-list" showHeading={false} />
+                        <ExpenseTable
+                            expenses={expenses.slice(0, 4)}
+                            monthlyIncome={monthlyIncome}
+                            customClass="dashboard-expense-list"
+                            showHeading={false}
+                        />
                     </div>
+
 
                     <div className="widget task-reminder">
                         <h3>Reminders</h3>

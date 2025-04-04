@@ -300,3 +300,12 @@ h1{
     padding: 0 !important;
     margin-top: 0;
 }
+
+.table-clickable {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.table-clickable:hover {
+    transform: scale(1.01);
+}
