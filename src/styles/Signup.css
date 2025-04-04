@@ -133,3 +133,17 @@ h2{
 .login-card .login-title{
     color: #388e3c;
 }
+
+.password-field {
+    position: relative;
+}
+
+.toggle-eye {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+}
