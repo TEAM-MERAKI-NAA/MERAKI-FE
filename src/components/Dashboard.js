@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/Dashboard.css";
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaCog } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 import ExpenseTable from "./ExpenseTable"; // Importing the reusable component
 
@@ -164,14 +164,28 @@ const Dashboard = () => {
                         {dropdownOpen && (
                             <div className="dropdown-menu">
                                 <ul>
-                                    <li className="logout">
-                                        <button onClick={logout}>
-                                            <FaSignOutAlt className="icon" /> Logout
-                                        </button>
+                                    <li onClick={() => navigate("/profile")}>
+                                        <a href="#profile">
+                                            <FaUser className="icon" />
+                                            Profile
+                                        </a>
+                                    </li>
+                                    <li onClick={() => navigate("/settings")}>
+                                        <a href="#settings">
+                                            <FaCog className="icon" />
+                                            Settings
+                                        </a>
+                                    </li>
+                                    <li className="logout" onClick={logout}>
+                                        <a href="#logout">
+                                            <FaSignOutAlt className="icon" />
+                                            Logout
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
                         )}
+
                     </div>
                 </div>
 
