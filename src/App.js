@@ -1,50 +1,95 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AuthProvider } from './contexts/AuthContext';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import DashboardLayout from './components/layout/DashboardLayout';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
-// Import components
-import Community from "./components/Community";
-import Finance from "./components/Finance";
-import LandingPage from "./components/LandingPage";
-import Homepage from "./components/Homepage";
-import AboutUs from "./components/AboutUs";
-import Login from "./components/Login";
-import News from "./components/News";
-import Reminder from "./components/Reminder";
-import Signup from "./components/Signup";
-import ForgotPassword from "./components/ForgotPassword";
-import Dashboard from "./components/Dashboard";
-import Profile from "./components/Profile";
-import Settings from "./components/Settings";
-import GuidancePage from "./components/GuidancePage";
-import GuidanceDetail from "./components/GuidanceDetail";
+// Public Pages
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Team from './pages/Team';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import ForgotPassword from './pages/ForgotPassword';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import CookiesPolicy from './pages/CookiesPolicy';
 
-// Import styles
-import "./styles/LandingPage.css";
+// Dashboard Pages
+import Dashboard from './pages/dashboard/Dashboard';
+import Documents from './pages/dashboard/Documents';
+import News from './pages/dashboard/News';
+import Community from './pages/dashboard/Community';
+import Guidelines from './pages/dashboard/Guidelines';
+import Budget from './pages/dashboard/Budget';
+import Profile from './pages/dashboard/Profile';
+import GuidelineDetail from './pages/dashboard/GuidelineDetail';
+import Deals from './pages/dashboard/Deals';
 
-function App() {
+// Layout component that conditionally renders Navbar and Footer
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const isDashboard = location.pathname.startsWith('/dashboard');
+
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/homepage" element={<Homepage />} />
-          <Route path="/aboutus" element={<AboutUs />} />
-          <Route path="/finance" element={<Finance />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/reminder" element={<Reminder />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/guidance" element={<GuidancePage />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/guidancedetail" element={<GuidanceDetail />} />
-        </Routes>
-      </div>
-    </Router>
+    <div className="min-h-screen flex flex-col">
+      {!isDashboard && <Navbar />}
+      <main className="flex-grow">
+        {children}
+      </main>
+      {!isDashboard && <Footer />}
+    </div>
   );
-}
+};
 
-export default App;
+const App = () => {
+  return (
+    <AuthProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/cookies-policy" element={<CookiesPolicy />} />
+
+            {/* Protected Dashboard Routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Dashboard />} />
+              <Route path="documents" element={<Documents />} />
+              <Route path="news" element={<News />} />
+              <Route path="community" element={<Community />} />
+              <Route path="guidelines" element={<Guidelines />} />
+              <Route path="guidelines/:slug" element={<GuidelineDetail />} />
+              <Route path="budget" element={<Budget />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="deals" element={<Deals />} />
+            </Route>
+          </Routes>
+        </Layout>
+        <ToastContainer position="top-right" />
+      </Router>
+    </AuthProvider>
+  );
+};
+
+export default App; 
