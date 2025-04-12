@@ -4,15 +4,11 @@ import {
   UserIcon, 
   EnvelopeIcon, 
   LockClosedIcon,
-  PhoneIcon,
-  MapPinIcon,
-  UserGroupIcon,
   CheckCircleIcon,
   EyeIcon,
   EyeSlashIcon
 } from '@heroicons/react/24/outline';
 import authService from '../services/authService';
-
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -23,9 +19,6 @@ const SignUp = () => {
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    phone: '',
-    province: '',
-    gender: '',
     frequency: 'daily',
     category: '',
     customCategory: '',
@@ -65,22 +58,6 @@ const SignUp = () => {
       errors.push('Please enter a valid email address');
     }
 
-    // Validate phone
-    const phoneRegex = /^\+?[\d\s-]{10,}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      errors.push('Please enter a valid phone number');
-    }
-
-    // Validate province
-    if (!formData.province) {
-      errors.push('Please select your province');
-    }
-
-    // Validate gender
-    if (!formData.gender) {
-      errors.push('Please select your gender');
-    }
-
     // Validate password
     if (formData.password.length < 8) {
       errors.push('Password must be at least 8 characters long');
@@ -112,8 +89,7 @@ const SignUp = () => {
           password: formData.password,
           password2: formData.confirmPassword,
           first_name: formData.firstName,
-          last_name: formData.lastName,
-          phone_number: formData.phone
+          last_name: formData.lastName
         };
 
         await authService.register(registrationData);
@@ -164,14 +140,9 @@ const SignUp = () => {
       confirmPassword: '',
       firstName: '',
       lastName: '',
-      phone: '',
-      province: '',
-      gender: '',
-      document_expiry_date: '',
       frequency: 'daily',
       category: '',
       customCategory: '',
-      priority: 'medium',
       is_active: true
     });
     setOtp('');
@@ -329,86 +300,6 @@ const SignUp = () => {
                       className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-colors"
                       placeholder="Enter your email"
                     />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <PhoneIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </div>
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      required
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-colors"
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="province" className="block text-sm font-medium text-gray-700 mb-1">
-                    Province
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <MapPinIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </div>
-                    <select
-                      id="province"
-                      name="province"
-                      required
-                      value={formData.province}
-                      onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-colors"
-                    >
-                      <option value="">Select your province</option>
-                      <option value="ontario">Ontario</option>
-                      <option value="quebec">Quebec</option>
-                      <option value="british_columbia">British Columbia</option>
-                      <option value="alberta">Alberta</option>
-                      <option value="manitoba">Manitoba</option>
-                      <option value="saskatchewan">Saskatchewan</option>
-                      <option value="nova_scotia">Nova Scotia</option>
-                      <option value="new_brunswick">New Brunswick</option>
-                      <option value="newfoundland">Newfoundland and Labrador</option>
-                      <option value="prince_edward_island">Prince Edward Island</option>
-                      <option value="northwest_territories">Northwest Territories</option>
-                      <option value="nunavut">Nunavut</option>
-                      <option value="yukon">Yukon</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
-                    Gender
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <UserGroupIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </div>
-                    <select
-                      id="gender"
-                      name="gender"
-                      required
-                      value={formData.gender}
-                      onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-colors"
-                    >
-                      <option value="">Select your gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                      <option value="prefer_not_to_say">Prefer not to say</option>
-                    </select>
                   </div>
                 </div>
 

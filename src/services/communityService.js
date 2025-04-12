@@ -69,6 +69,20 @@ const communityService = {
         throw new Error('Title and description are required');
       }
 
+      // Get user data from localStorage if not provided in postData
+      if (!postData.email && !postData.user_email) {
+        try {
+          const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+          if (userData.email) {
+            postData.email = userData.email;
+            postData.user_email = userData.email;
+            console.log('Added email from localStorage:', userData.email);
+          }
+        } catch (error) {
+          console.error('Error accessing localStorage:', error);
+        }
+      }
+
       const response = await axios.post(`${API_BASE_URL}/community/api/posts/`, postData, {
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +123,30 @@ const communityService = {
   getCommentsByPostId: async (postId) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/community/api/posts/${postId}/comments/`);
-      return response.data;
+      console.log('Raw comments response:', response.data); // Debug log
+      
+      // Process comments to ensure they have email information
+      const processedComments = response.data.map(comment => {
+        // If comment doesn't have email info, try to get it from localStorage
+        if (!comment.email && !comment.user_email && !comment.user?.email) {
+          try {
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (userData.email) {
+              return {
+                ...comment,
+                email: userData.email,
+                user_email: userData.email
+              };
+            }
+          } catch (error) {
+            console.error('Error accessing localStorage:', error);
+          }
+        }
+        return comment;
+      });
+      
+      console.log('Processed comments:', processedComments); // Debug log
+      return processedComments;
     } catch (error) {
       throw error.response?.data || error.message;
     }
@@ -117,6 +154,20 @@ const communityService = {
 
   createComment: async (postId, commentData) => {
     try {
+      // Get user data from localStorage if not provided in commentData
+      if (!commentData.email && !commentData.user_email) {
+        try {
+          const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+          if (userData.email) {
+            commentData.email = userData.email;
+            commentData.user_email = userData.email;
+            console.log('Added email from localStorage to comment:', userData.email);
+          }
+        } catch (error) {
+          console.error('Error accessing localStorage:', error);
+        }
+      }
+
       const response = await axios.post(
         `${API_BASE_URL}/community/api/posts/${postId}/comments/`,
         commentData

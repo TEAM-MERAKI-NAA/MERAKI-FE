@@ -51,17 +51,24 @@ const SignIn = () => {
       
       const userData = await userResponse.json();
       
+      // Check if user has completed their profile - only check for first name and last name now
+      const isProfileComplete = userData.first_name && userData.last_name;
+      
       // Store user data in localStorage
       localStorage.setItem('userData', JSON.stringify({
         email: response.email,
         firstName: userData.first_name || '',
         lastName: userData.last_name || '',
-        phone: userData.phone_number || '',
-        isVerified: userData.is_verified || false,
-        province: userData.province || '',
-        gender: userData.gender || '',
-        nationality: userData.nationality || ''
+        isVerified: userData.is_verified || false
       }));
+
+      // Set profileCompleted flag based on the new criteria
+      if (isProfileComplete) {
+        localStorage.setItem('profileCompleted', 'true');
+      } else {
+        // Make sure to remove the flag if profile is not complete
+        localStorage.removeItem('profileCompleted');
+      }
 
       navigate('/dashboard');
     } catch (error) {

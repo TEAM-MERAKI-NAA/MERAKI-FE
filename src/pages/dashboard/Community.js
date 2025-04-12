@@ -5,6 +5,8 @@ import {
   BookmarkIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import communityService from '../../services/communityService';
 
 const QueryCard = ({ query }) => {
@@ -22,7 +24,30 @@ const QueryCard = ({ query }) => {
     try {
       setLoadingComments(true);
       const data = await communityService.getCommentsByPostId(query.id);
-      setComments(data || []);
+      console.log('Fetched comments data:', data); // Debug log
+      
+      // Process comments to ensure they have email information
+      const processedComments = data.map(comment => {
+        // If comment doesn't have email info, try to get it from localStorage
+        if (!comment.email && !comment.user_email && !comment.user?.email) {
+          try {
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (userData.email) {
+              return {
+                ...comment,
+                email: userData.email,
+                user_email: userData.email
+              };
+            }
+          } catch (error) {
+            console.error('Error accessing localStorage:', error);
+          }
+        }
+        return comment;
+      });
+      
+      console.log('Processed comments:', processedComments); // Debug log
+      setComments(processedComments || []);
     } catch (error) {
       console.error('Error fetching comments:', error);
     } finally {
@@ -40,13 +65,16 @@ const QueryCard = ({ query }) => {
       const firstName = userData.firstName || '';
       const lastName = userData.lastName || '';
       const fullName = firstName && lastName ? `${firstName} ${lastName}` : '';
+      const email = userData.email || '';
       
-      // Include user name in the comment data
+      // Include user name and email in the comment data
       const commentData = {
         content: comment,
         user_first_name: firstName,
         user_last_name: lastName,
-        user_full_name: fullName
+        user_full_name: fullName,
+        user_email: email,
+        email: email
       };
       
       await communityService.createComment(query.id, commentData);
@@ -55,6 +83,111 @@ const QueryCard = ({ query }) => {
     } catch (error) {
       console.error('Error posting comment:', error);
     }
+  };
+
+  // Get user's full name from the query data
+  const getUserFullName = () => {
+    // Check for firstName and lastName in the user object
+    if (query.user?.firstName && query.user?.lastName) {
+      return `${query.user.firstName} ${query.user.lastName}`;
+    }
+    // Check for first_name and last_name in the user object (alternative format)
+    if (query.user?.first_name && query.user?.last_name) {
+      return `${query.user.first_name} ${query.user.last_name}`;
+    }
+    // Check for user_full_name in the query
+    if (query.user_full_name) {
+      return query.user_full_name;
+    }
+    // Check for user_first_name and user_last_name in the query
+    if (query.user_first_name && query.user_last_name) {
+      return `${query.user_first_name} ${query.user_last_name}`;
+    }
+    // Fallback to email
+    return query.user?.email || 'Anonymous';
+  };
+
+  // Get user's email from the query data
+  const getUserEmail = () => {
+    console.log('Query data:', query); // Debug log
+    
+    // Check for email in the user object
+    if (query.user?.email) {
+      console.log('Found email in user object:', query.user.email);
+      return query.user.email;
+    }
+    
+    // Check for email directly on the query
+    if (query.email) {
+      console.log('Found email directly on query:', query.email);
+      return query.email;
+    }
+    
+    // Check for user_email in the query
+    if (query.user_email) {
+      console.log('Found user_email on query:', query.user_email);
+      return query.user_email;
+    }
+    
+    // Try to get email from localStorage as a fallback
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      if (userData.email) {
+        console.log('Found email in localStorage:', userData.email);
+        return userData.email;
+      }
+    } catch (error) {
+      console.error('Error accessing localStorage:', error);
+    }
+    
+    // Fallback to anonymous
+    console.log('No email found, using Anonymous');
+    return 'Anonymous';
+  };
+
+  // Clean HTML content
+  const cleanHtmlContent = (content) => {
+    if (!content) return '';
+    // Remove HTML tags but keep line breaks
+    return content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  };
+
+  // Get comment user's email
+  const getCommentUserEmail = (comment) => {
+    console.log('Comment data:', comment); // Debug log
+    
+    // Check for email in the user object
+    if (comment.user?.email) {
+      console.log('Found email in user object:', comment.user.email);
+      return comment.user.email;
+    }
+    
+    // Check for email directly on the comment
+    if (comment.email) {
+      console.log('Found email directly on comment:', comment.email);
+      return comment.email;
+    }
+    
+    // Check for user_email in the comment
+    if (comment.user_email) {
+      console.log('Found user_email on comment:', comment.user_email);
+      return comment.user_email;
+    }
+    
+    // Try to get email from localStorage as a fallback
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      if (userData.email) {
+        console.log('Found email in localStorage:', userData.email);
+        return userData.email;
+      }
+    } catch (error) {
+      console.error('Error accessing localStorage:', error);
+    }
+    
+    // Fallback to anonymous
+    console.log('No email found for comment, using Anonymous');
+    return 'Anonymous';
   };
 
   if (!query) {
@@ -68,17 +201,17 @@ const QueryCard = ({ query }) => {
           <div className="flex items-center space-x-3 mb-4">
             <div className="h-10 w-10 rounded-full bg-gradient-to-r from-primary-500 to-primary-600 flex items-center justify-center">
               <span className="text-white font-semibold">
-                {query.user?.email?.charAt(0).toUpperCase() || 'A'}
+                {getUserFullName().charAt(0).toUpperCase()}
               </span>
             </div>
             <div>
               <h3 className="text-xl font-semibold text-gray-900">{query.title || 'Untitled'}</h3>
               <p className="text-sm text-gray-500">
-                Posted by {query.user?.email || 'Anonymous'} • {query.created_at ? new Date(query.created_at).toLocaleDateString() : 'Unknown date'}
+                Posted by {getUserEmail()} • {query.created_at ? new Date(query.created_at).toLocaleDateString() : 'Unknown date'}
               </p>
             </div>
           </div>
-          <p className="text-gray-700 leading-relaxed">{query.description || 'No description provided'}</p>
+          <p className="text-gray-700 leading-relaxed">{cleanHtmlContent(query.description)}</p>
         </div>
       </div>
 
@@ -96,16 +229,12 @@ const QueryCard = ({ query }) => {
                 <div className="flex items-center space-x-3 mb-2">
                   <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
                     <span className="text-gray-600 text-sm font-medium">
-                      {comment.user_first_name ? comment.user_first_name.charAt(0).toUpperCase() : 
-                       comment.user?.email?.charAt(0).toUpperCase() || 'A'}
+                      {getCommentUserEmail(comment).charAt(0).toUpperCase()}
                     </span>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">
-                      {comment.user_full_name || 
-                       (comment.user_first_name && comment.user_last_name 
-                        ? `${comment.user_first_name} ${comment.user_last_name}` 
-                        : comment.user?.email || 'Anonymous')}
+                      {getCommentUserEmail(comment)}
                     </p>
                     <p className="text-xs text-gray-500">
                       {comment.created_at ? new Date(comment.created_at).toLocaleDateString() : 'Unknown date'}
@@ -151,6 +280,22 @@ const Community = () => {
   });
   const [submitting, setSubmitting] = useState(false);
 
+  // Quill editor modules configuration
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
+    ],
+  };
+
+  const formats = [
+    'bold', 'italic', 'underline',
+    'list', 'bullet',
+    'link'
+  ];
+
   useEffect(() => {
     fetchQueries();
   }, []);
@@ -176,7 +321,30 @@ const Community = () => {
     setError('');
 
     try {
-      await communityService.createPost(newQuery);
+      // Get user data from localStorage
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      console.log('User data from localStorage:', userData); // Debug log
+      
+      const firstName = userData.firstName || '';
+      const lastName = userData.lastName || '';
+      const fullName = firstName && lastName ? `${firstName} ${lastName}` : '';
+      const email = userData.email || '';
+      
+      console.log('Email from userData:', email); // Debug log
+      
+      // Include user name and email in the post data
+      const postData = {
+        ...newQuery,
+        user_first_name: firstName,
+        user_last_name: lastName,
+        user_full_name: fullName,
+        user_email: email,
+        email: email // Add email directly to the post data as well
+      };
+      
+      console.log('Post data being sent:', postData); // Debug log
+      
+      await communityService.createPost(postData);
       setNewQuery({ title: '', description: '' });
       setShowNewQuery(false);
       fetchQueries();
@@ -193,6 +361,13 @@ const Community = () => {
     setNewQuery(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handleDescriptionChange = (content) => {
+    setNewQuery(prev => ({
+      ...prev,
+      description: content
     }));
   };
 
@@ -251,16 +426,17 @@ const Community = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                value={newQuery.description}
-                onChange={handleChange}
-                required
-                rows="4"
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
-                placeholder="Describe your query in detail"
-              ></textarea>
+              <div className="border rounded-lg">
+                <ReactQuill
+                  value={newQuery.description}
+                  onChange={handleDescriptionChange}
+                  modules={modules}
+                  formats={formats}
+                  className="h-48"
+                  theme="snow"
+                  placeholder="Describe your query in detail..."
+                />
+              </div>
             </div>
             <div className="flex justify-end space-x-3">
               <button

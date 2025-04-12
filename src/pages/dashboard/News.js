@@ -288,42 +288,50 @@ const News = () => {
               console.log(`News item ${index}: ${item.title}, Date: ${item.pubDate}, Parsed: ${parseDate(item.pubDate).toISOString()}`);
               
               return (
-                <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden h-full transform hover:-translate-y-1 border border-gray-100">
-                  {item.image_url && (
-                    <div className="relative h-48 w-full overflow-hidden">
-                      <img
-                        src={item.image_url}
-                        alt={item.title}
-                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                        onError={(e) => {
-                          console.error('Image load error:', e);
-                          e.target.src = 'https://via.placeholder.com/400x300?text=News+Image';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
-                    </div>
-                  )}
-                  <div className="p-6 flex flex-col h-full">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors duration-200">{item.title}</h3>
-                      <div className="flex items-center text-sm text-gray-500 mb-4">
-                        <CalendarIcon className="h-4 w-4 mr-1 text-primary-500" />
-                        <span>{formatDate(item.pubDate)}</span>
+                <a
+                  href={item.link || item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  key={index}
+                  className="block cursor-pointer"
+                >
+                  <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden h-full transform hover:-translate-y-1 border border-gray-100 group">
+                    {item.image_url && (
+                      <div className="relative h-48 w-full overflow-hidden">
+                        <img
+                          src={item.image_url}
+                          alt={item.title}
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            console.error('Image load error:', e);
+                            e.target.src = 'https://via.placeholder.com/400x300?text=News+Image';
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
                       </div>
-                      <div className="mt-4">
-                        <p className="text-gray-600 line-clamp-3 group-hover:text-gray-700 transition-colors duration-200">
-                          {item.description}
-                        </p>
+                    )}
+                    <div className="p-6 flex flex-col h-full">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors duration-200">{item.title}</h3>
+                        <div className="flex items-center text-sm text-gray-500 mb-4">
+                          <CalendarIcon className="h-4 w-4 mr-1 text-primary-500" />
+                          <span>{formatDate(item.pubDate)}</span>
+                        </div>
+                        <div className="mt-4">
+                          <p className="text-gray-600 line-clamp-3 group-hover:text-gray-700 transition-colors duration-200">
+                            {item.description}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="mt-6 flex items-center text-primary-600 group-hover:text-primary-700 transition-colors duration-200">
-                      <span className="text-sm font-medium">Read more</span>
-                      <svg className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
+                      <div className="mt-6 flex items-center text-primary-600 group-hover:text-primary-700 transition-colors duration-200">
+                        <span className="text-sm font-medium">Read more</span>
+                        <svg className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </a>
               );
             })
           )}

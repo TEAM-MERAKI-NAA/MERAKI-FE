@@ -62,7 +62,7 @@ import {
 const getCountryCode = (currency) => {
   const currencyToCountry = {
     'USD': 'US',
-    'EUR': 'EU',
+    'EUR': 'DE', // Changed from 'EU' to 'DE' (Germany) as the primary EU country
     'GBP': 'GB',
     'JPY': 'JP',
     'AUD': 'AU',
@@ -95,9 +95,72 @@ const getCountryCode = (currency) => {
     'COP': 'CO',
     'SAR': 'SA',
     'MYR': 'MY',
-    'RON': 'RO'
+    'RON': 'RO',
+    'VND': 'VN',
+    'EGP': 'EG',
+    'ARS': 'AR',
+    'QAR': 'QA',
+    'KWD': 'KW',
+    'BHD': 'BH',
+    'OMR': 'OM',
+    'JOD': 'JO',
+    'LBP': 'LB',
+    'IQD': 'IQ',
+    'LYD': 'LY',
+    'TND': 'TN',
+    'DZD': 'DZ',
+    'MAD': 'MA',
+    'PKR': 'PK',
+    'BDT': 'BD',
+    'LKR': 'LK',
+    'NPR': 'NP',
+    'MMK': 'MM',
+    'KHR': 'KH',
+    'LAK': 'LA',
+    'MNT': 'MN',
+    'BND': 'BN',
+    'PGK': 'PG',
+    'FJD': 'FJ',
+    'SBD': 'SB',
+    'VUV': 'VU',
+    'WST': 'WS',
+    'TOP': 'TO',
+    'KMF': 'KM',
+    'DJF': 'DJ',
+    'YER': 'YE',
+    'AFN': 'AF',
+    'IRR': 'IR',
+    'MVR': 'MV',
+    'BTN': 'BT',
+    'XCD': 'AG',
+    'XPF': 'PF',
+    'XAF': 'CM',
+    'XOF': 'SN',
+    // Special currencies - use a generic flag
+    'XAU': 'UN', // Gold - using UN flag
+    'XAG': 'UN', // Silver - using UN flag
+    'XPD': 'UN', // Palladium - using UN flag
+    'XPT': 'UN', // Platinum - using UN flag
+    'XDR': 'UN'  // Special Drawing Rights - using UN flag
   };
-  return currencyToCountry[currency] || 'US'; // Default to US if not found
+  
+  // Check if the currency exists in our mapping
+  if (currencyToCountry[currency]) {
+    return currencyToCountry[currency];
+  }
+  
+  // For unknown currencies, try to use the first two letters as country code
+  // This works for many currencies where the code matches the country code
+  if (currency && currency.length >= 2) {
+    const potentialCountryCode = currency.substring(0, 2).toUpperCase();
+    // Check if this country code exists in the Flags object
+    if (Flags[potentialCountryCode]) {
+      return potentialCountryCode;
+    }
+  }
+  
+  // Default to a generic flag if no match is found
+  return 'UN';
 };
 
 // Sample data for fallback UI
@@ -161,13 +224,12 @@ const Dashboard = () => {
       try {
         const parsedUserData = JSON.parse(userData);
         setUserName({
-          firstName: parsedUserData.firstName || 'John',
-          lastName: parsedUserData.lastName || 'Doe'
+          firstName: parsedUserData.firstName || '',
+          lastName: parsedUserData.lastName || ''
         });
         
         // Check if this is a new user (no profile completion flag)
-        const isNewUser = !localStorage.getItem('profileCompleted');
-        if (isNewUser) {
+        if (!localStorage.getItem('profileCompleted')) {
           setShowProfilePopup(true);
         }
       } catch (e) {
@@ -369,7 +431,6 @@ const Dashboard = () => {
   
   const handleGoToProfile = () => {
     setShowProfilePopup(false);
-    localStorage.setItem('profileCompleted', 'true');
     navigate('/dashboard/profile');
   };
 
@@ -395,32 +456,35 @@ const Dashboard = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
+    <div className="container mx-auto px-4 py-8">
       {/* Profile Completion Popup */}
-      <Dialog
-        open={showProfilePopup}
-        onClose={handleCloseProfilePopup}
-        aria-labelledby="profile-popup-title"
-        aria-describedby="profile-popup-description"
-      >
-        <DialogTitle id="profile-popup-title">
-          Complete Your Profile
-        </DialogTitle>
-        <DialogContent id="profile-popup-description">
-          <Typography>
-            Welcome to Immigration Hub! To get the most out of your experience, please complete your profile information.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseProfilePopup} color="primary">
-            Later
-          </Button>
-          <Button onClick={handleGoToProfile} color="primary" variant="contained">
-            Complete Profile
-          </Button>
-        </DialogActions>
-      </Dialog>
-      
+      {showProfilePopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Complete Your Profile
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Welcome to Immigration Hub! To get the most out of your experience, please complete your profile information.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={handleCloseProfilePopup}
+                className="px-4 py-2 text-gray-700 hover:text-gray-900"
+              >
+                Later
+              </button>
+              <button
+                onClick={handleGoToProfile}
+                className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              >
+                Complete Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
         <Typography variant="h4" component="h1" gutterBottom>
@@ -748,16 +812,6 @@ const Dashboard = () => {
                           <h3 className="font-medium text-gray-900 mb-1">
                             {news.title}
                           </h3>
-                          <div className="flex items-center text-sm text-gray-500 mb-2">
-                            <CalendarIcon className="h-4 w-4 mr-1" />
-                            <span>
-                              {new Date(news.date || news.updated).toLocaleDateString()}
-                            </span>
-                            <ClockIcon className="h-4 w-4 ml-4 mr-1" />
-                            <span>
-                              {new Date(news.date || news.updated).toLocaleTimeString()}
-                            </span>
-                          </div>
                           <p className="text-sm text-gray-600 line-clamp-2">
                             {news.description || news.summary}
                           </p>
@@ -790,7 +844,7 @@ const Dashboard = () => {
           </Card>
         </Grid>
       </div>
-    </Box>
+    </div>
   );
 };
 
